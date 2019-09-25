@@ -1,0 +1,176 @@
+.App {
+    text-align: center;
+  }
+  
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+    height: 40vmin;
+    pointer-events: none;
+  }
+  
+  .App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
+  
+  .header {
+    display: block;
+    background-color: blue;
+  }
+  
+  .App-link {
+    color: #61dafb;
+  }
+  
+  @keyframes App-logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .logoStrip {
+    text-align: left;
+    display: block;
+    height: 1.5em;
+    font-size: 2.5em;
+    background-color: #ECECEC;
+    border-bottom: 2px solid #616161;
+        -webkit-touch-callout: none; /* iOS Safari */
+          -webkit-user-select: none; /* Safari */
+           -khtml-user-select: none; /* Konqueror HTML */
+             -moz-user-select: none; /* Old versions of Firefox */
+              -ms-user-select: none; /* Internet Explorer/Edge */
+                  user-select: none; /* Non-prefixed version, currently
+                                        supported by Chrome, Opera and Firefox */
+  }
+
+  .navLink {
+    float: left;
+    margin: 10px 0 10px 20px;
+    color: #616161;
+    transition: 0.3s ease-in-out;
+    text-decoration: none;
+  }
+  
+  .navLink:hover {
+    color: black;
+    border-bottom: 1px solid black;
+    transition: 0.3s ease-in-out;
+  }
+  
+  .navLink2 {
+    float: right;
+    margin: 10px 20px;
+    color: #616161;
+    transition: 0.3s ease-in-out;
+    text-decoration: none;
+  }
+  
+  .navLink2:hover {
+    color: black;
+    border-bottom: 1px solid black;
+    transition: 0.3s ease-in-out;
+  }
+  
+  .ordersContainer {
+    display: block;
+    margin-top: 50px;
+  }
+  
+  .orders {
+    table-layout: auto;
+    margin: 0 25px;
+    border-collapse: collapse;
+  }
+  
+  .orders th,
+  .orders td {
+    border: 2px solid lightgray;
+    padding: 5px 10px;
+  }
+  
+  .ordersGrid {
+    display: block;
+  }
+  
+  .newCustomerContainer {
+    display: block;
+    margin-top: 50px;
+    margin-left: 25px;
+    text-align: left;
+  }
+  
+  .newCustomerContainer input {
+    display: block;
+  }
+
+  .ampersand {
+      font-size: 30px;
+      position: relative;
+      bottom: 2px;
+      margin-left: 3px;
+      margin-right: 2px;
+  }
+
+  .slasher {
+      font-size: 72px;
+      position: absolute;
+      top: -24px;
+      left: 204px;
+      color: #616161;
+      letter-spacing: -15px;
+      font-weight: 150;
+  }
+
+  .words {
+    position: relative;
+    top: 5px;
+    left: 80px;
+    color: #616161; 
+    font-weight: 600;
+  }
+  
+  .greenBoy {
+    font-weight: 400;
+    margin-right: 30px;
+  }
+
+  .logoSmall {
+      position: absolute;
+      left: 20px;
+      top: 10px;
+      width: 60px;
+  }
+
+  .cutWords {
+      color: #CCFF00;
+      text-shadow:
+      -1px -1px 0 #616161,
+      1px -1px 0 #616161,
+      -1px 1px 0 #616161,
+      1px 1px 0 #616161;
+  }
+
+  .trimWords {
+      color: #71D400;
+      text-shadow:
+      -1px -1px 0 #616161,
+      1px -1px 0 #616161,
+      -1px 1px 0 #616161,
+      1px 1px 0 #616161;
+  }
+
+  .crmWords {
+      font-size: 20px;
+      position: relative;
+      bottom: 5px;
+  }

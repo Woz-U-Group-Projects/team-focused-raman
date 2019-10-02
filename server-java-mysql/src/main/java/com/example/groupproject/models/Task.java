@@ -1,5 +1,6 @@
 package com.example.groupproject.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,14 +8,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "project")
-public class Project {
+@Table(name = "task")
+public class Task {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   private String name;
-  private String createdBy;
+  @Column(columnDefinition = "boolean default false")
+  private boolean complete;
 
   public Long getId() {
     return this.id;
@@ -32,12 +34,12 @@ public class Project {
     this.name = name;
   }
 
-  public String getCreatedBy() {
-    return this.createdBy;
+  public boolean getComplete() {
+    return this.complete;
   }
 
-  public void setCreatedBy(String createdBy) {
-    this.createdBy = createdBy;
+  public void setComplete(boolean complete) {
+    this.complete = complete;
   }
 
 }

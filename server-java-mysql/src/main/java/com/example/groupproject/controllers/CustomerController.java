@@ -21,37 +21,37 @@ import com.example.groupproject.models.CustomerRepository;
 public class CustomerController {
 
   @Autowired
-  CustomerController customerRepository;
+  CustomerRepository customerRepository;
 
   @GetMapping()
   public List<Customer> getCustomers() {
     return customerRepository.findAll();
   }
 
-  private List<Customer> findAll() {
-	// TODO Auto-generated method stub
-	return null;
-}
+//  private List<Customer> findAll() {
+//	// TODO Auto-generated method stub
+//	return null;
+//}
 
 @PostMapping()
   public Customer addCustomer(@RequestBody Customer customer) {
     return customerRepository.save(customer);
   }
 
-  private Customer save(Customer customer) {
-	// TODO Auto-generated method stub
-	return null;
-}
+//  private Customer save(Customer customer) {
+//	// TODO Auto-generated method stub
+//	return null;
+//}
 
 @DeleteMapping("/{id}")
   public void deleteCustomer(@PathVariable Long id) {
     customerRepository.deleteById(id);
   }
 
-private void deleteById(Long id) {
-	// TODO Auto-generated method stub
-	
-}
+//private void deleteById(Long id) {
+//	// TODO Auto-generated method stub
+//	
+//}
 
 //@PutMapping("/{id}")
 //  public Customer updateProject(@PathVariable Long id, @RequestBody Customer customer) {

@@ -16,13 +16,13 @@ public class Customer {
   private Long customerid;
   private String firstName;
   private String lastName;
-//  private double mtrate;
-//  private double mtfrate;
-//  private double mtbrate;
-//  private String paymentType;
-//  private String basis;
-//  private String day;
-//  
+  private double mtrate;
+  private double mtfrate;
+  private double mtbrate;
+  private String paymentType;
+  private String basis;
+  private String day;
+  
 public Long getCustomerid() {
 	return customerid;
 }
@@ -41,42 +41,44 @@ public String getLastName() {
 public void setLastName(String lastName) {
 	this.lastName = lastName;
 }
-//public double getMtrate() {
-//	return mtrate;
-//}
-//public void setMtrate(double mtrate) {
-//	this.mtrate = mtrate;
-//}
-//public double getMtfrate() {
-//	return mtfrate;
-//}
-//public void setMtfrate(double mtfrate) {
-//	this.mtfrate = mtfrate;
-//}
-//public double getMtbrate() {
-//	return mtbrate;
-//}
-//public void setMtbrate(double mtbrate) {
-//	this.mtbrate = mtbrate;
-//}
-//public String getPaymentType() {
-//	return paymentType;
-//}
-//public void setPaymentType(String paymentType) {
-//	this.paymentType = paymentType;
-//}
-//public String getBasis() {
-//	return basis;
-//}
-//public void setBasis(String basis) {
-//	this.basis = basis;
-//}
-//public String getDay() {
-//	return day;
-//}
-//public void setDay(String day) {
-//	this.day = day;
-//}
+public double getMtrate() {
+	return mtrate;
+}
+public void setMtrate(double mtrate) {
+	this.mtrate = mtrate;
+}
+
+//@Column(columnDefinition = "double default 0.00")
+public double getMtfrate() {
+	return mtfrate;
+}
+public void setMtfrate(double mtfrate) {
+	this.mtfrate = mtfrate;
+}
+public double getMtbrate() {
+	return mtbrate;
+}
+public void setMtbrate(double mtbrate) {
+	this.mtbrate = mtbrate;
+}
+public String getPaymentType() {
+	return paymentType;
+}
+public void setPaymentType(String paymentType) {
+	this.paymentType = paymentType;
+}
+public String getBasis() {
+	return basis;
+}
+public void setBasis(String basis) {
+	this.basis = basis;
+}
+public String getDay() {
+	return day;
+}
+public void setDay(String day) {
+	this.day = day;
+}
   
 //  @Column(columnDefinition = "boolean default false")
 //  private boolean complete;

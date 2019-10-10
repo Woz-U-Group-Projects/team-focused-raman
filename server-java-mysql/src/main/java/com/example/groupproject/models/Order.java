@@ -15,6 +15,7 @@ public class Order {
   @GeneratedValue(strategy = GenerationType.AUTO)
   
   private Long orderid;
+  private Long customerid;
   private String serviceDate;
   private String service;
   private double cu;
@@ -27,6 +28,13 @@ public class Order {
   private double total;
   private String paymentType;
   private String notes;
+  
+public Long getCustomerid() {
+	return customerid;
+}
+public void setCustomerid(Long customerid) {
+	this.customerid = customerid;
+}
   
 public Long getOrderid() {
 	return orderid;

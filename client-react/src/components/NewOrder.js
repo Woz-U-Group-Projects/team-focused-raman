@@ -15,9 +15,8 @@ class NewOrder extends React.Component {
         super(props);
         this.state = { orders: []
         };
-        this.selectCustomer = React.createRef();
-        this.customerid = React.createRef();
         this.orderid = React.createRef();
+        this.customerid = React.createRef();
         this.firstName = React.createRef();
         this.lastName = React.createRef();
         this.serviceDate = React.createRef();
@@ -43,7 +42,7 @@ class NewOrder extends React.Component {
     
     getData = () => {
         // Java Spring Boot uses port 8080
-        let url = "http://localhost:8080/order";
+        let url = "http://localhost:8080/orderdetail";
         
         // C# dotnetcore uses port 5000
         //let url = "http://localhost:5000/projects";
@@ -61,6 +60,7 @@ class NewOrder extends React.Component {
 //            customerid: this.customerid.current.value,
 //            firstName: this.firstName.current.value,
 //            lastName: this.lastName.current.value,
+            customerid: this.customerid.current.value,
             serviceDate: this.serviceDate.current.value,
             service: this.service.current.value,
             cu: this.cu.current.value,
@@ -84,6 +84,7 @@ class NewOrder extends React.Component {
 //            this.customerid.current.value = "";
 //            this.firstName.current.value = "";
 //            this.lastName.current.value = "";
+            this.customerid.current.value = "";
             this.serviceDate.current.value = "";
             this.service.current.value = "";
             this.cu.current.value = "";
@@ -110,8 +111,8 @@ class NewOrder extends React.Component {
             <form action="">
                         
             <div className="field">
-            <input type="text" ref={this.selectCustomer} name="selectCustomer" id="selectCustomer" placeholder="Jane Appleseed" />
-            <label htmlFor="selectCustomer">Select Customer</label>
+            <input type="text" ref={this.customerid} name="customerid" id="customerid" placeholder="Jane Appleseed" />
+            <label htmlFor="customerid">Customer ID</label>
             </div>
             
             <div className="field">
@@ -162,6 +163,7 @@ class NewOrder extends React.Component {
             
             <tr>
             <th>Order ID</th>
+            <th>Customer ID</th>
             <th>Customer Name</th>
             <th>Service Date</th>
             <th>Service Rendered</th>
@@ -181,16 +183,17 @@ class NewOrder extends React.Component {
                 
                 <tr key={p.orderid}>
                 <td>{p.orderid}</td>
-                <td>{p.firstName} {p.lastName}</td>
-                <td>{p.serviceDate}</td>
+                <td>{p.customerid}</td>
+                <td>{p.customerName}</td>
+                <td>{p.service_date}</td>
                 <td>{p.service}</td>
                 <td>{p.cu}</td>
                 <td>{p.pw}</td>
                 <td>{p.r}</td>
                 <td>{p.lr}</td>
                 <td>{p.misc}</td>
-                <td>{p.mowTotal}</td>
-                <td>{p.extrasTotal}</td>
+                <td>{p.mow_total}</td>
+                <td>{p.extras_total}</td>
                 <td>{p.total}</td>
                 <td>{p.notes}</td>
                 <td>

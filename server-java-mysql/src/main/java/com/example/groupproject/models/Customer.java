@@ -1,6 +1,6 @@
 package com.example.groupproject.models;
 
-import javax.persistence.Column;
+// import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +16,8 @@ public class Customer {
   private Long customerid;
   private String firstName;
   private String lastName;
+  private String phone;
+  private String email;
   private double mtrate;
   private double mtfrate;
   private double mtbrate;
@@ -78,6 +80,19 @@ public String getDay() {
 }
 public void setDay(String day) {
 	this.day = day;
+}
+
+public String getPhone() {
+	return phone;
+}
+public void setPhone(String phone) {
+	this.phone = phone;
+}
+public String getEmail() {
+	return email;
+}
+public void setEmail(String email) {
+	this.email = email;
 }
   
 //  @Column(columnDefinition = "boolean default false")

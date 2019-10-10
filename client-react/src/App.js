@@ -1,5 +1,6 @@
 import React from "react";
 import NewCustomer from "./components/NewCustomer";
+import NewOrder from "./components/NewOrder";
 import Header from "./components/Header";
 import Navbar from "./components/Navbar";
 import { BrowserRouter as Router, Route } from 'react-router-dom';
@@ -12,6 +13,7 @@ function App() {
       <Router>
         <Navbar />
         <Route path="/customers" component={NewCustomer} />
+        <Route path="/orders" component={NewOrder} />
       </Router>
 
       

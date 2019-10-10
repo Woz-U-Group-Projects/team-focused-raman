@@ -13,30 +13,45 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.groupproject.models.Customer;
-import com.example.groupproject.models.CustomerRepository;
+import com.example.groupproject.models.Order;
+import com.example.groupproject.models.OrderRepository;
 
 @RestController
-@RequestMapping("/customer")
-public class CustomerController {
+@RequestMapping("/order")
+public class OrderController {
 
   @Autowired
-  CustomerRepository customerRepository;
+  OrderRepository orderRepository;
 
   @GetMapping()
-  public List<Customer> getCustomers() {
-    return customerRepository.findAll();
-  }
-  
-@PostMapping()
-  public Customer addCustomer(@RequestBody Customer customer) {
-    return customerRepository.save(customer);
+  public List<Order> getOrders() {
+    return orderRepository.findAll();
   }
 
-@DeleteMapping("/{id}")
-  public void deleteCustomer(@PathVariable Long id) {
-    customerRepository.deleteById(id);
+//  private List<Customer> findAll() {
+//	// TODO Auto-generated method stub
+//	return null;
+//}
+
+@PostMapping()
+  public Order addOrder(@RequestBody Order order) {
+    return orderRepository.save(order);
   }
+
+//  private Customer save(Customer customer) {
+//	// TODO Auto-generated method stub
+//	return null;
+//}
+
+@DeleteMapping("/{id}")
+  public void deleteOrder(@PathVariable Long id) {
+	orderRepository.deleteById(id);
+  }
+
+//private void deleteById(Long id) {
+//	// TODO Auto-generated method stub
+//	
+//}
 
 //@PutMapping("/{id}")
 //  public Customer updateProject(@PathVariable Long id, @RequestBody Customer customer) {

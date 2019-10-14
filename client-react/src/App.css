@@ -462,3 +462,11 @@ input:focus::-webkit-datetime-edit{ color: #000; }
 .customerSearchContainer {
   position: relative;
 }
+
+.noData {
+  display: table-row;
+}
+
+.dataIsAvailable {
+  display: none;
+}

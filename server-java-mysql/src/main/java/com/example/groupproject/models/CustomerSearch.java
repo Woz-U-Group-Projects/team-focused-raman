@@ -1,6 +1,6 @@
 package com.example.groupproject.models;
 
-// import javax.persistence.Column;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,8 +13,9 @@ public class CustomerSearch {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long customersearchid;
+  @Column(name = "customerid", updatable = false, nullable = false)
   private Long customerid;
+  private Long customersearchid;
   private String returnedQuery;
 
 public Long getCustomersearchid() {

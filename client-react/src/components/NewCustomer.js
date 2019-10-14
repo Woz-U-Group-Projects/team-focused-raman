@@ -193,9 +193,9 @@ class NewCustomer extends React.Component {
         <td>
         <div className="gridAction">
         <span title="Edit Customer"><img alt="edit" className="visible actionEdit" src={edit} /></span>
-        <span title="Edit Customer"><img alt="edit" className="hidden actionEdit" src={editHover} /></span>
+        <span title="Edit Customer"><img alt="edit" className="hiddenIcon actionEdit" src={editHover} /></span>
         <span title="Delete Customer"><img alt="delete" className="visible actionDelete" src={deleteIcon} /></span>
-        <span title="Delete Customer"><img alt="delete" className="hidden actionDelete" src={deleteHover} /></span>
+        <span title="Delete Customer"><img alt="delete" className="hiddenIcon actionDelete" src={deleteHover} /></span>
         
         </div>
         </td>

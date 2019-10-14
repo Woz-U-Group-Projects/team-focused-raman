@@ -18,9 +18,9 @@ function Navbar() {
     <Link to="/orders">Orders</Link>
     <Link to="/customers">Customers</Link>
 
-  <a href="javascript:void(0);" className="icon" onClick={myFunction}>
+  <button className="icon" onClick={myFunction}>
     <i className="fa fa-bars"></i>
-  </a>
+  </button>
 </div>
   );
 }

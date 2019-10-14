@@ -172,7 +172,8 @@
     background-color: #333;
   }
   
-  .topnav a {
+  .topnav a,
+  .topnav button {
     float: left;
     display: block;
     color: #f2f2f2;
@@ -180,11 +181,13 @@
     padding: 14px 16px;
     text-decoration: none;
     font-size: 17px;
+    cursor: pointer;
   }
   
   .topnav a:hover {
-    background-color: #ddd;
-    color: black;
+    background-color: #545454;
+    color: snow;
+    transition: 0.3s ease-in-out;
   }
   
   .topnav a.active {
@@ -198,7 +201,7 @@
   
   @media screen and (max-width: 600px) {
     .topnav a:not(:first-child) {display: none;}
-    .topnav a.icon {
+    .topnav .icon {
       float: right;
       display: block;
     }
@@ -292,12 +295,12 @@ form {
 * inputs, but hey, it's new and cool and could remove the 
 * pesky delay.
 */
-label, input {
+label, input, select {
   transition: all 0.2s;
   touch-action: manipulation;
 }
 
-input {
+input, select {
   font-size: 1em;
   border: 0;
   border-bottom: 1px solid #ccc;
@@ -308,8 +311,22 @@ input {
   cursor: text;
 }
 
+select {
+  cursor: pointer;
+}
+
 input:focus {
   outline: 0;
+  border-bottom: 1px solid #666;
+}
+
+select {
+  outline: none;
+  background-color: rgba(0,0,0,0);
+}
+
+select:active,
+select:focus {
   border-bottom: 1px solid #666;
 }
 
@@ -360,14 +377,13 @@ input:focus::-webkit-input-placeholder {
 input:not(:placeholder-shown) + label,
 input:focus + label {
   transform: translate(0, 0) scale(1);
-  cursor: pointer;
 }
 
-.hidden {
+.hiddenIcon {
   opacity: 0;
 }
 
-.hidden:hover {
+.hiddenIcon:hover {
   opacity: 1;
   transition: 0.4s ease-in-out;
 }
@@ -400,7 +416,49 @@ input:focus + label {
 }
 
 .grid {
-  max-width: 100%;
-  min-width: 600px;
+  width: 100%;
   overflow-x: scroll;
+}
+
+input::-webkit-datetime-edit{ color: transparent; }
+input:focus::-webkit-datetime-edit{ color: #000; }
+
+.gridTable {
+  min-width: 100%;
+}
+
+.searchResults {
+  border: 1px solid #BDBDBD;
+  display: inline-block;
+  width: calc(100% - 22px);
+  background-color: #F0F0F0;
+  position: absolute;
+  top: 190px;
+  z-index: 1 !important;
+}
+
+.customerSearchResult {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.customerSearchResult:hover,
+.customerSearchResult:active {
+  background-color: #E1E1E1;
+  transition: 0.2s ease-in-out;
+}
+
+.customerSearchResult:not(:first-child) {
+  padding-top: 5px;
+}
+
+.hidden {
+  display:none;
+}
+.show{
+  display:block;
+}
+
+.customerSearchContainer {
+  position: relative;
 }

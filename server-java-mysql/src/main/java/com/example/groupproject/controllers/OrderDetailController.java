@@ -34,56 +34,99 @@ public class OrderDetailController {
         			"CONCAT(customer.first_name, \" \", customer.last_name) as customerName, \n" + 
         			"orders.service_date, \n" + 
         			"orders.service, \n" + 
-        			"orders.cu, \n" + 
-        			"orders.pw, \n" + 
-        			"orders.r, \n" + 
-        			"orders.lr, \n" + 
-        			"orders.misc, \n" + 
-        			"\n" + 
+        			"CASE\n" + 
+        			"	WHEN\n" + 
+        			"		orders.cu='0'\n" + 
+        			"	THEN\n" + 
+        			"        \"-\"\n" + 
+        			"	ELSE\n" + 
+        			"		orders.cu\n" + 
+        			"	END AS cu,\n" + 
+        			"        \n" + 
+        			"CASE\n" + 
+        			"	WHEN\n" + 
+        			"		orders.pw='0'\n" + 
+        			"	THEN\n" + 
+        			"        \"-\"\n" + 
+        			"	ELSE\n" + 
+        			"		orders.pw\n" + 
+        			"	END AS pw,\n" + 
+        			"CASE\n" + 
+        			"	WHEN\n" + 
+        			"		orders.r='0'\n" + 
+        			"	THEN\n" + 
+        			"        \"-\"\n" + 
+        			"	ELSE\n" + 
+        			"		orders.r\n" + 
+        			"	END AS r,\n" + 
+        			"CASE\n" + 
+        			"	WHEN\n" + 
+        			"		orders.lr='0'\n" + 
+        			"	THEN\n" + 
+        			"        \"-\"\n" + 
+        			"	ELSE\n" + 
+        			"		orders.lr\n" + 
+        			"	END AS lr,\n" + 
+        			"CASE\n" + 
+        			"	WHEN\n" + 
+        			"		orders.misc='0'\n" + 
+        			"	THEN\n" + 
+        			"        \"-\"\n" + 
+        			"	ELSE\n" + 
+        			"		orders.misc\n" + 
+        			"	END AS misc,\n" + 
         			"(SELECT   \n" + 
         			"	CASE\n" + 
         			"    WHEN\n" + 
         			"      orders.service= 'MT'\n" + 
         			"        THEN\n" + 
-        			"          customer.mtrate\n" + 
+        			"          CONCAT('$', cast(customer.mtrate as DECIMAL(10,2)))\n" + 
         			"    WHEN\n" + 
         			"      orders.service= 'MTF'\n" + 
         			"        THEN\n" + 
-        			"          customer.mtfrate\n" + 
+        			"          CONCAT('$', cast(customer.mtfrate as DECIMAL(10,2)))\n" + 
         			"    WHEN\n" + 
         			"      orders.service= 'MTB'\n" + 
         			"        THEN\n" + 
-        			"          customer.mtbrate\n" + 
-        			"    ELSE\n" + 
-        			"      'Earth'\n" + 
+        			"          CONCAT('$', cast(customer.mtbrate as DECIMAL(10,2)))\n" + 
         			"  END) AS mow_total,\n" + 
         			"\n" + 
-        			"(SELECT (orders.cu + orders.pw + orders.r + orders.lr + orders.misc) * 0.80) AS extras_total, \n" + 
+        			"(SELECT \n" + 
+        			"	CASE\n" + 
+        			"	WHEN\n" + 
+        			"		((orders.cu + orders.pw + orders.r + orders.lr + orders.misc) * 0.80) = '0'\n" + 
+        			"	THEN\n" + 
+        			"		\"-\"\n" + 
+        			"	ELSE\n" + 
+        			"		CONCAT('$', cast(((orders.cu + orders.pw + orders.r + orders.lr + orders.misc) * 0.80) as DECIMAL(10,2)))\n" + 
+        			"	END) AS extras_total, \n" + 
         			"\n" + 
         			"(SELECT   \n" + 
-        			"	CASE\n" + 
+        			"	CONCAT('$', \n" + 
+        			"        (CASE\n" + 
         			"    WHEN\n" + 
         			"      orders.service= 'MT'\n" + 
         			"        THEN\n" + 
-        			"          customer.mtrate\n" + 
+        			"          cast(customer.mtrate as DECIMAL(10,2))\n" + 
         			"    WHEN\n" + 
         			"      orders.service= 'MTF'\n" + 
         			"        THEN\n" + 
-        			"          customer.mtfrate\n" + 
+        			"          cast(customer.mtfrate as DECIMAL(10,2))\n" + 
         			"    WHEN\n" + 
         			"      orders.service= 'MTB'\n" + 
         			"        THEN\n" + 
-        			"          customer.mtbrate\n" + 
-        			"    ELSE\n" + 
-        			"      'Earth'\n" + 
-        			"  END) + (SELECT (orders.cu + orders.pw + orders.r + orders.lr + orders.misc) * 0.80) as total,\n" + 
+        			"          cast(customer.mtbrate as DECIMAL(10,2))\n" + 
+        			"  END) + cast(((orders.cu + orders.pw + orders.r + orders.lr + orders.misc) * 0.80) as DECIMAL(10,2)))) as total,\n" + 
         			"\n" + 
         			"orders.notes\n" + 
         			"\n" + 
         			"FROM finalproject.orders\n" + 
         			"\n" + 
         			"INNER JOIN finalproject.customer\n" + 
-        			"USING(customerid);"
+        			"USING(customerid)\n" + 
+        			"\n" + 
+        			"ORDER BY orderid DESC;\n" + 
+        			""
         			);
         	while (rs.next()) {
 

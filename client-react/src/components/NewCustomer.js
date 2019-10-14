@@ -121,17 +121,34 @@ class NewCustomer extends React.Component {
       </div>
       
       <div className="field">
-      <input type="text" ref={this.paymentType} name="paymentType" id="paymentType" placeholder="Cash" />
+      <select defaultValue="" ref={this.paymentType} name="paymentType" id="paymentType" >
+        <option value="" disabled>Select...</option>
+        <option value="Cash">Cash</option>
+        <option value="Credit">Credit</option>
+      </select>
       <label htmlFor="paymentType">Payment Type</label>
       </div>
-      
+
       <div className="field">
-      <input type="text" ref={this.basis} name="basis" id="basis" placeholder="Weekly" />
+      <select defaultValue="" ref={this.basis} name="basis" id="basis" >
+        <option value="" disabled>Select...</option>
+        <option value="Weekly">Weekly</option>
+        <option value="Bi-Weekly">Bi-Weekly</option>
+      </select>
       <label htmlFor="basis">Basis</label>
       </div>
       
       <div className="field">
-      <input type="text" ref={this.day} name="day" id="day" placeholder="Monday" />
+      <select defaultValue="" ref={this.day} name="day" id="day" >
+        <option value="" disabled>Select...</option>
+        <option value="Monday">Monday</option>
+        <option value="Tuesday">Tuesday</option>
+        <option value="Wednesday">Wednesday</option>
+        <option value="Thursday">Thursday</option>
+        <option value="Friday">Friday</option>
+        <option value="Saturday">Saturday</option>
+        <option value="Sunday">Sunday</option>
+      </select>
       <label htmlFor="day">Day</label>
       </div>
       
@@ -143,7 +160,7 @@ class NewCustomer extends React.Component {
       <h3>Customers</h3>
       
       <div className="grid">
-      <table>
+      <table className="gridTable">
       <tbody>
       
       <tr>
@@ -175,10 +192,10 @@ class NewCustomer extends React.Component {
         <td>{p.day}</td>
         <td>
         <div className="gridAction">
-        <span title="Edit Customer"><img className="visible actionEdit" src={edit} /></span>
-        <span title="Edit Customer"><img className="hidden actionEdit" src={editHover} /></span>
-        <span title="Delete Customer"><img className="visible actionDelete" src={deleteIcon} /></span>
-        <span title="Delete Customer"><img className="hidden actionDelete" src={deleteHover} /></span>
+        <span title="Edit Customer"><img alt="edit" className="visible actionEdit" src={edit} /></span>
+        <span title="Edit Customer"><img alt="edit" className="hidden actionEdit" src={editHover} /></span>
+        <span title="Delete Customer"><img alt="delete" className="visible actionDelete" src={deleteIcon} /></span>
+        <span title="Delete Customer"><img alt="delete" className="hidden actionDelete" src={deleteHover} /></span>
         
         </div>
         </td>

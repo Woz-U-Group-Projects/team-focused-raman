@@ -12,7 +12,7 @@ class NewOrder extends React.Component {
             orders: [],
             query: [],
             searchResults: "hidden",
-            isShown: false
+            dataAvailable: "noData"
         };
         this.newOrder = React.createRef();
         this.orderid = React.createRef();
@@ -24,7 +24,7 @@ class NewOrder extends React.Component {
         this.r = React.createRef();
         this.lr = React.createRef();
         this.misc = React.createRef();
-        // this.notes = React.createRef();
+        this.notes = React.createRef();
         
         // search
         this.returnedQuery = React.createRef();       
@@ -34,11 +34,23 @@ class NewOrder extends React.Component {
 
         // bound functions
         this.enter = this.enter.bind(this);
+        this.selectContents = this.selectContents.bind(this);
     }
     
-    componentDidMount() {
+    componentWillMount() {
         this.getData();
         this.getSearchData();
+    }
+
+    componentDidMount() {
+    }
+
+    showNoData = () => {
+        if(this.state.orders.length >= 1) {
+            this.setState({dataAvailable: "dataIsAvailable"})
+        } else {
+            this.setState({dataAvailable: "noData"})
+        }
     }
 
     getInitialState(){
@@ -51,6 +63,10 @@ class NewOrder extends React.Component {
 
     showResults = () => {
         this.setState({"searchResults":"show"});
+    }
+
+    selectContents = (e) => {
+        e.target.select();
     }
 
     searchThis = () => {
@@ -71,7 +87,9 @@ class NewOrder extends React.Component {
 
     getData = () => {
         let url = "http://localhost:8080/orderdetail";
-        axios.get(url).then(response => this.setState({ orders: response.data }));
+        axios.get(url).then(response => this.setState({ orders: response.data },function() {
+            this.showNoData();
+        }));
     };
     
     getSearchData = () => {
@@ -96,7 +114,7 @@ class NewOrder extends React.Component {
             r: this.r.current.value,
             lr: this.lr.current.value,
             misc: this.misc.current.value,
-            // notes: this.notes.current.value,     
+            notes: this.notes.current.value,     
         }).then(response => {
             // refresh the data
             this.getData();
@@ -111,7 +129,7 @@ class NewOrder extends React.Component {
             this.r.current.value = "";
             this.lr.current.value = "";
             this.misc.current.value = "";
-            // this.notes.current.value = "";
+            this.notes.current.value = "";
             
         });
     };
@@ -125,7 +143,7 @@ class NewOrder extends React.Component {
             <form action="">
             
             <div className="field">
-            <input onChange={this.searchThis} type="text" ref={this.searchInput} name="searchInput" id="searchInput" placeholder="Type to Search..." autoComplete="off" />
+            <input onChange={this.searchThis} onFocus={this.selectContents} type="text" ref={this.searchInput} name="searchInput" id="searchInput" placeholder="Type to Search..." autoComplete="off" />
             <label htmlFor="searchInput">Customer</label>
             </div>
 
@@ -180,6 +198,11 @@ class NewOrder extends React.Component {
             <div className="field">
             <input type="number" ref={this.misc} name="misc" id="misc" placeholder="00" />
             <label htmlFor="misc">Misc. Labor</label>
+            </div>
+
+            <div className="field">
+            <input type="text" ref={this.notes} name="notes" id="notes" placeholder="Enter a note..." />
+            <label htmlFor="notes">Notes</label>
             </div>
             
             <button type="button" onClick={this.addOrder}>Save Order</button>
@@ -240,6 +263,10 @@ class NewOrder extends React.Component {
                 </tr>
                 ))}
                 
+                <tr className={this.state.dataAvailable}>
+                    <td colSpan="15">No Data Available.</td>
+                </tr>
+
                 </tbody>
                 </table>
                 </div>

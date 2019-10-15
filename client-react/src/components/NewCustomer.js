@@ -13,7 +13,9 @@ class NewCustomer extends React.Component {
   
   constructor(props) {
     super(props);
-    this.state = { customers: []
+    this.state = { customers: [],
+      dataAvailable: "noData",
+      pageTitle: "New Customer"
     };
     this.firstName = React.createRef();
     this.lastName = React.createRef();
@@ -26,24 +28,25 @@ class NewCustomer extends React.Component {
     this.basis = React.createRef();
     this.day = React.createRef();
     this.phoneField = React.createRef();
-    
-    //    this.handleOnChange = this.handleOnChange.bind(this);
   }
   
-  componentDidMount() {
+  componentWillMount() {
     this.getData();
   }
+
+  showNoData = () => {
+    if(this.state.customers.length >= 1) {
+        this.setState({dataAvailable: "dataIsAvailable"})
+    } else {
+        this.setState({dataAvailable: "noData"})
+    }
+}
   
   getData = () => {
-    // Java Spring Boot uses port 8080
     let url = "http://localhost:8080/customer";
-    
-    // C# dotnetcore uses port 5000
-    //let url = "http://localhost:5000/projects";
-    
-    // Express uses port 3001 (react uses 3000)
-    //let url = "http://localhost:3001/tasks";
-    axios.get(url).then(response => this.setState({ customers: response.data }));
+    axios.get(url).then(response => this.setState({ customers: response.data }, function() {
+      this.showNoData();
+    }));
   };
   
   addCustomer = () => {
@@ -193,15 +196,19 @@ class NewCustomer extends React.Component {
         <td>
         <div className="gridAction">
         <span title="Edit Customer"><img alt="edit" className="visible actionEdit" src={edit} /></span>
-        <span title="Edit Customer"><img alt="edit" className="hidden actionEdit" src={editHover} /></span>
+        <span title="Edit Customer"><img alt="edit" className="hiddenIcon actionEdit" src={editHover} /></span>
         <span title="Delete Customer"><img alt="delete" className="visible actionDelete" src={deleteIcon} /></span>
-        <span title="Delete Customer"><img alt="delete" className="hidden actionDelete" src={deleteHover} /></span>
+        <span title="Delete Customer"><img alt="delete" className="hiddenIcon actionDelete" src={deleteHover} /></span>
         
         </div>
         </td>
         </tr>
         ))}
         
+        <tr className={this.state.dataAvailable}>
+          <td colSpan="11">No Data Available.</td>
+        </tr>
+
         </tbody>
         </table>
         </div>

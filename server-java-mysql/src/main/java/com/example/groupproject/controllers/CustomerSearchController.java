@@ -42,8 +42,95 @@ public class CustomerSearchController {
         			"last_name)\n" + 
         			"as returnedQuery\n" + 
         			"FROM finalproject.customer\n" + 
+        			"\n" + 
         			"WHERE\n" + 
-        			"first_name like CONCAT('%',\n" + 
+        			"\n" + 
+        			"CASE WHEN\n" + 
+        			"(LENGTH((select search from finalproject.customersearchinput\n" + 
+        			"	order by id desc\n" + 
+        			"	limit 1)) - LENGTH(REPLACE((select search from finalproject.customersearchinput\n" + 
+        			"	order by id desc\n" + 
+        			"	limit 1), ' ', ''))) > 0\n" + 
+        			"THEN\n" + 
+        			"\n" + 
+        			"/*bigger than 1 WHERE clause goes here*/\n" + 
+        			"/* FIRST AND */\n" + 
+        			"((first_name like CONCAT('%',\n" + 
+        			"(SELECT \n" + 
+        			"	LEFT(search, LOCATE(' ', search) - 1)\n" + 
+        			"	from finalproject.customersearchinput\n" + 
+        			"	order by id DESC\n" + 
+        			"	limit 1),\n" + 
+        			"	'%'))\n" + 
+        			"OR\n" + 
+        			"(last_name like CONCAT('%',\n" + 
+        			"(SELECT \n" + 
+        			"	LEFT(search, LOCATE(' ', search) - 1)\n" + 
+        			"	from finalproject.customersearchinput\n" + 
+        			"	order by id DESC\n" + 
+        			"	limit 1),\n" + 
+        			"	'%'))\n" + 
+        			"OR\n" + 
+        			"(email like CONCAT('%',\n" + 
+        			"(SELECT \n" + 
+        			"	LEFT(search, LOCATE(' ', search) - 1)\n" + 
+        			"	from finalproject.customersearchinput\n" + 
+        			"	order by id DESC\n" + 
+        			"	limit 1),\n" + 
+        			"	'%'))\n" + 
+        			"OR\n" + 
+        			"(phone like CONCAT('%',\n" + 
+        			"(SELECT \n" + 
+        			"	LEFT(search, LOCATE(' ', search) - 1)\n" + 
+        			"	from finalproject.customersearchinput\n" + 
+        			"	order by id DESC\n" + 
+        			"	limit 1),\n" + 
+        			"	'%')))\n" + 
+        			"/* SECOND AND */\n" + 
+        			"AND\n" + 
+        			"(first_name like CONCAT('%',\n" + 
+        			"(SELECT \n" + 
+        			"    MID(search, \n" + 
+        			"    LOCATE(' ', search) + 1,\n" + 
+        			"    LENGTH(SUBSTRING_INDEX(search, ' ', 2)) - LENGTH(SUBSTRING_INDEX(search, ' ', 1)))	from finalproject.customersearchinput\n" + 
+        			"	order by id DESC\n" + 
+        			"	limit 1)\n" + 
+        			"    ,\n" + 
+        			"	'%'))\n" + 
+        			"    OR\n" + 
+        			"    (last_name like CONCAT('%',\n" + 
+        			"(SELECT \n" + 
+        			"    MID(search, \n" + 
+        			"    LOCATE(' ', search) + 1,\n" + 
+        			"    LENGTH(SUBSTRING_INDEX(search, ' ', 2)) - LENGTH(SUBSTRING_INDEX(search, ' ', 1)))	from finalproject.customersearchinput\n" + 
+        			"	order by id DESC\n" + 
+        			"	limit 1)\n" + 
+        			"    ,\n" + 
+        			"	'%'))\n" + 
+        			"        OR\n" + 
+        			"    (email like CONCAT('%',\n" + 
+        			"(SELECT \n" + 
+        			"    MID(search, \n" + 
+        			"    LOCATE(' ', search) + 1,\n" + 
+        			"    LENGTH(SUBSTRING_INDEX(search, ' ', 2)) - LENGTH(SUBSTRING_INDEX(search, ' ', 1)))	from finalproject.customersearchinput\n" + 
+        			"	order by id DESC\n" + 
+        			"	limit 1)\n" + 
+        			"    ,\n" + 
+        			"	'%'))\n" + 
+        			"        OR\n" + 
+        			"    (phone like CONCAT('%',\n" + 
+        			"(SELECT \n" + 
+        			"    MID(search, \n" + 
+        			"    LOCATE(' ', search) + 1,\n" + 
+        			"    LENGTH(SUBSTRING_INDEX(search, ' ', 2)) - LENGTH(SUBSTRING_INDEX(search, ' ', 1)))	from finalproject.customersearchinput\n" + 
+        			"	order by id DESC\n" + 
+        			"	limit 1)\n" + 
+        			"    ,\n" + 
+        			"	'%'))\n" + 
+        			"/*end WHERE clause*/\n" + 
+        			"ELSE\n" + 
+        			"\n" + 
+        			"(first_name like CONCAT('%',\n" + 
         			"	(select search from finalproject.customersearchinput\n" + 
         			"	order by id desc\n" + 
         			"	limit 1),\n" + 
@@ -65,8 +152,10 @@ public class CustomerSearchController {
         			"	(select search from finalproject.customersearchinput\n" + 
         			"	order by id desc\n" + 
         			"	limit 1),\n" + 
-        			"	'%')\n" + 
+        			"	'%'))\n" + 
+        			"END\n" + 
         			"LIMIT 7\n" + 
+        			"\n" + 
         			"\n" + 
         			""
         			);

@@ -8,6 +8,7 @@ class CustomerSearch extends React.Component {
         this.state = { 
             query: [],
             searchResults: "hidden",
+            dataAvailable: "dataIsAvailable"
         };
         this.returnedQuery = React.createRef();       
         this.searchResults = React.createRef();       
@@ -23,10 +24,18 @@ class CustomerSearch extends React.Component {
         return {searchResults:"show"};
     };
     
-    componentDidMount() {
+    componentWillMount() {
         this.getData();
     };
     
+    showNoData = () => {
+        if(this.state.customers.length >= 1) {
+            this.setState({dataAvailable: "dataIsAvailable"})
+        } else {
+            this.setState({dataAvailable: "noData"})
+        }
+    }
+
     toggleSearchResults() {
 //        var css = (this.state.searchResults === "hidden") ? "show" : "hidden";
 //        this.setState({"searchResults":css});
@@ -46,7 +55,9 @@ class CustomerSearch extends React.Component {
 
     getData = () => {
         let url = "http://localhost:8080/customersearch";
-        axios.get(url).then(response => this.setState({ query: response.data }));
+        axios.get(url).then(response => this.setState({ query: response.data }, function(){
+            this.showNoData();
+        }));
     };
     
     searchThis = () => {

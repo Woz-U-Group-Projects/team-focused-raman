@@ -1,5 +1,6 @@
 package com.example.groupproject.models;
 
+import javax.persistence.Column;
 // import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +14,7 @@ public class Order {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  
+  @Column(name = "orderid", updatable = false, nullable = false)
   private Long orderid;
   private Long customerid;
   private String serviceDate;

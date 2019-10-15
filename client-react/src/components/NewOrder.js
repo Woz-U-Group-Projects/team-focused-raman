@@ -12,7 +12,7 @@ class NewOrder extends React.Component {
             orders: [],
             query: [],
             searchResults: "hidden",
-            dataAvailable: "dataIsAvailable"
+            dataAvailable: "noData"
         };
         this.newOrder = React.createRef();
         this.orderid = React.createRef();

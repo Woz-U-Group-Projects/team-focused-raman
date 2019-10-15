@@ -14,7 +14,8 @@ class NewCustomer extends React.Component {
   constructor(props) {
     super(props);
     this.state = { customers: [],
-      dataAvailable: "dataIsAvailable"
+      dataAvailable: "noData",
+      pageTitle: "New Customer"
     };
     this.firstName = React.createRef();
     this.lastName = React.createRef();

@@ -60,10 +60,10 @@ class SignUpForm extends React.Component {
           <p key={error}>Error: {error}</p>
         ))}
         <input
-          value={this.state.name}
-          onChange={evt => this.setState({ name: evt.target.value })}
+          value={this.state.firstName}
+          onChange={evt => this.setState({ firstName: evt.target.value })}
           type="text"
-          placeholder="Name"
+          placeholder="firstName"
         />
         <input
           value={this.state.email}

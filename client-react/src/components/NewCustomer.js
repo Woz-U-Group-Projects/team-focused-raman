@@ -1,6 +1,32 @@
 import React from "react";
 import axios from "axios";
 
+function validate(name, email) {
+  // we are going to store errors for all fields
+  // in a signle array
+  const errors = [];
+
+  if (firstName.length === 0) {
+    errors.push("Name can't be empty");
+  }
+  if (lastName.length === 0) {
+    errors.push("Name can't be empty");
+  }
+
+  if (email.length < 5) {
+    errors.push("Email should be at least 5 charcters long");
+  }
+  if (email.split("").filter(x => x === "@").length !== 1) {
+    errors.push("Email should contain a @");
+  }
+  if (email.indexOf(".") === -1) {
+    errors.push("Email should contain at least one dot");
+  }
+
+  return errors;
+}
+
+
 class NewCustomer extends React.Component {
   
   handleOnChange(value) {
@@ -8,11 +34,31 @@ class NewCustomer extends React.Component {
   }
 
   constructor(props) {
-    super(props);
+    super(props);this.state = {
+      firstName: "",
+      lastName: "",
+      email: "",
+
+      errors: []
+    };
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+
+    const { firstName, lastName, email } = this.state;
+
+    const errors = validate(firstName, lastName, email);
+    if (errors.length > 0) {
+      this.setState({ errors });
+      return;
+    }
     this.state = { customers: []
     };
     this.firstName = React.createRef();
     this.lastName = React.createRef();
+    this.email = React.createRef();
     this.mtrate = React.createRef();
     this.mtfrate = React.createRef();
     this.mtbrate = React.createRef();
@@ -46,6 +92,7 @@ class NewCustomer extends React.Component {
       axios.post(url, { 
           firstName: this.firstName.current.value,
           lastName: this.lastName.current.value,
+          email: this.email.current.value,
           mtrate: this.mtrate.current.value,
           mtfrate: this.mtfrate.current.value,
           mtbrate: this.mtbrate.current.value,
@@ -58,6 +105,7 @@ class NewCustomer extends React.Component {
         // empty the input
         this.firstName.current.value = "";
         this.lastName.current.value = "";
+        this.email.current.value = "";
         this.mtrate.current.value = "";
         this.mtfrate.current.value = "";
         this.mtbrate.current.value = "";
@@ -73,23 +121,41 @@ class NewCustomer extends React.Component {
       <div className="customer">
         <h3>New Customer</h3>
         
-        <form action="">
+        <form onSubmit={this.handleSubmit} action="">
+        {errors.map(error => (
+          <p key={error}>Error: {error}</p>
+        ))}
 
           <div className="field">
-            <input type="text" ref={this.firstName} name="firstName" id="firstName" placeholder="Jane" required />
-            <label htmlFor="firstName">First Name</label>
+          <input
+          value={this.state.firstName}
+          onChange={evt => this.setState({ firstName: evt.target.value })}
+          type="text"
+          placeholder="firstName"
+        />
           </div>
   
           <div className="field">
-            <input type="text" ref={this.lastName} name="lastName" id="lastName" placeholder="Appleseed" required />
-            <label htmlFor="lastName">Last Name</label>
+          <input
+          value={this.state.lastName}
+          onChange={evt => this.setState({ lastName: evt.target.value })}
+          type="text"
+          placeholder="lastName"
+        />
           </div>
 
           <div className="field">
             <input type="numerical" ref={this.phone} name="phone" id="phone" placeholder="(123) 456-7890" />
             <label htmlFor="phone">Phone</label>
           </div>
-
+          <div>
+          <input
+          value={this.state.email}
+          onChange={evt => this.setState({ email: evt.target.value })}
+          type="text"
+          placeholder="Email"
+        />
+          </div>
           <div className="field">
             <input type="numerical" ref={this.mtrate} name="mtrate" id="mtrate" placeholder="$100.00" required />
             <label htmlFor="mtrate">Mow/Trim Rate</label>
@@ -133,6 +199,7 @@ class NewCustomer extends React.Component {
                 <tr>
                     <th>Customer ID</th>
                     <th>Customer Name</th>
+                    <th>Email</th>
                     <th>MT / MTF / MTB</th>
                     <th>Payment Type</th>
                     <th>Basis</th>
@@ -144,6 +211,7 @@ class NewCustomer extends React.Component {
             <tr key={p.customerid}>
               <td>{p.customerid}</td>
               <td>{p.firstName} {p.lastName}</td>
+              <td>{p.email}</td>
               <td>{p.mtrate} / {p.mtfrate} / {p.mtbrate}</td>
               <td>{p.paymentType}</td>
               <td>{p.basis}</td>
@@ -159,3 +227,4 @@ class NewCustomer extends React.Component {
 }
 
 export default NewCustomer;
+ReactDOM.render(<NewCustomer />, rootElement);

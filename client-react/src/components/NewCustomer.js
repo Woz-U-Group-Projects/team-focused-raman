@@ -5,17 +5,13 @@ import editHover from "../img/editHover.png";
 import deleteIcon from "../img/delete.png";
 import deleteHover from "../img/deleteHover.png";
 
-class NewCustomer extends React.Component {
-  
-  //  handleOnChange(value) {
-  //    this.setState({ phone: value })
-  //  }
-  
+class NewCustomer extends React.Component {  
   constructor(props) {
     super(props);
     this.state = { customers: [],
       dataAvailable: "noData",
-      pageTitle: "New Customer"
+      pageTitle: "New Customer",
+      deleteCustomer: "Jeff"
     };
     this.firstName = React.createRef();
     this.lastName = React.createRef();
@@ -28,19 +24,21 @@ class NewCustomer extends React.Component {
     this.basis = React.createRef();
     this.day = React.createRef();
     this.phoneField = React.createRef();
+    
+    this.deleteCustomer = this.deleteCustomer.bind(this);
   }
   
   componentWillMount() {
     this.getData();
   }
-
+  
   showNoData = () => {
     if(this.state.customers.length >= 1) {
-        this.setState({dataAvailable: "dataIsAvailable"})
+      this.setState({dataAvailable: "dataIsAvailable"})
     } else {
-        this.setState({dataAvailable: "noData"})
+      this.setState({dataAvailable: "noData"})
     }
-}
+  }
   
   getData = () => {
     let url = "http://localhost:8080/customer";
@@ -49,8 +47,21 @@ class NewCustomer extends React.Component {
     }));
   };
   
+  deleteCustomer = (someone) => {
+    // eslint-disable-next-line
+    let url = "http://localhost:8080/customer/" + `${someone}`
+    axios.delete(url)
+//    .catch(function (error) {
+//      console.log("Deletion failed with error: " + error);
+//    })
+.then(response => {
+  // refresh the data
+  this.getData();
+  // empty the input
+})
+  }
+  
   addCustomer = () => {
-    
     let url = "http://localhost:8080/customer";
     axios.post(url, { 
       firstName: this.firstName.current.value,
@@ -125,32 +136,32 @@ class NewCustomer extends React.Component {
       
       <div className="field">
       <select defaultValue="" ref={this.paymentType} name="paymentType" id="paymentType" >
-        <option value="" disabled>Select...</option>
-        <option value="Cash">Cash</option>
-        <option value="Credit">Credit</option>
+      <option value="" disabled>Select...</option>
+      <option value="Cash">Cash</option>
+      <option value="Credit">Credit</option>
       </select>
       <label htmlFor="paymentType">Payment Type</label>
       </div>
-
+      
       <div className="field">
       <select defaultValue="" ref={this.basis} name="basis" id="basis" >
-        <option value="" disabled>Select...</option>
-        <option value="Weekly">Weekly</option>
-        <option value="Bi-Weekly">Bi-Weekly</option>
+      <option value="" disabled>Select...</option>
+      <option value="Weekly">Weekly</option>
+      <option value="Bi-Weekly">Bi-Weekly</option>
       </select>
       <label htmlFor="basis">Basis</label>
       </div>
       
       <div className="field">
       <select defaultValue="" ref={this.day} name="day" id="day" >
-        <option value="" disabled>Select...</option>
-        <option value="Monday">Monday</option>
-        <option value="Tuesday">Tuesday</option>
-        <option value="Wednesday">Wednesday</option>
-        <option value="Thursday">Thursday</option>
-        <option value="Friday">Friday</option>
-        <option value="Saturday">Saturday</option>
-        <option value="Sunday">Sunday</option>
+      <option value="" disabled>Select...</option>
+      <option value="Monday">Monday</option>
+      <option value="Tuesday">Tuesday</option>
+      <option value="Wednesday">Wednesday</option>
+      <option value="Thursday">Thursday</option>
+      <option value="Friday">Friday</option>
+      <option value="Saturday">Saturday</option>
+      <option value="Sunday">Sunday</option>
       </select>
       <label htmlFor="day">Day</label>
       </div>
@@ -198,7 +209,7 @@ class NewCustomer extends React.Component {
         <span title="Edit Customer"><img alt="edit" className="visible actionEdit" src={edit} /></span>
         <span title="Edit Customer"><img alt="edit" className="hiddenIcon actionEdit" src={editHover} /></span>
         <span title="Delete Customer"><img alt="delete" className="visible actionDelete" src={deleteIcon} /></span>
-        <span title="Delete Customer"><img alt="delete" className="hiddenIcon actionDelete" src={deleteHover} /></span>
+        <span onClick={() => this.deleteCustomer(p.customerid)} title="Delete Customer"><img alt="delete" className="hiddenIcon actionDelete" src={deleteHover} /></span>
         
         </div>
         </td>
@@ -206,9 +217,9 @@ class NewCustomer extends React.Component {
         ))}
         
         <tr className={this.state.dataAvailable}>
-          <td colSpan="11">No Data Available.</td>
+        <td colSpan="11">No Data Available.</td>
         </tr>
-
+        
         </tbody>
         </table>
         </div>

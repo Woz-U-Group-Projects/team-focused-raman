@@ -3,6 +3,7 @@ package com.example.groupproject.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 // import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,9 +34,10 @@ public class CustomerController {
     return customerRepository.save(customer);
   }
 
-@DeleteMapping("/{id}")
-  public void deleteCustomer(@PathVariable Long id) {
-    customerRepository.deleteById(id);
+@CrossOrigin
+@DeleteMapping("/{customerid}")
+  public void deleteCustomer(@PathVariable Long customerid) {
+    customerRepository.deleteById(customerid);
   }
 
 //@PutMapping("/{id}")

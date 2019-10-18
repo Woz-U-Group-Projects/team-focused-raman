@@ -1,5 +1,9 @@
 import React from "react";
 import axios from "axios";
+import edit from "../img/edit.png";
+import editHover from "../img/editHover.png";
+import deleteIcon from "../img/delete.png";
+import deleteHover from "../img/deleteHover.png";
 
 class NewOrder extends React.Component {
     constructor(props) {
@@ -145,78 +149,61 @@ class NewOrder extends React.Component {
     render() {
         
         return (
-            <div ref={this.newOrder} className="customer">
-            <h3>New Order</h3>
-            
-            <form action="">
-            
-            <div className="field">
-            <input onChange={this.searchThis} onFocus={this.selectContents} type="text" ref={this.searchInput} name="searchInput" id="searchInput" placeholder="Type to Search..." autoComplete="off" />
-            <label htmlFor="searchInput">Customer</label>
-            </div>
-            
-            <div className="field hidden">
-            <input type="number" ref={this.customerid} name="customerid" id="customerid" placeholder="1" autoComplete="off" />
-            <label htmlFor="customerid">Customer ID</label>
-            </div>
-            
-            <div ref={this.searchResults} className={this.state.searchResults}>
-            <div className="searchResults">
-            {this.state.query.map(
+            <div ref={this.newOrder} className="customer">           
+            <h3>Orders</h3>
+            <div className="grid">
+            <table>
+            <tbody>
+            <tr>
+            <th>Order ID</th>
+            <th>Customer ID</th>
+            <th>Customer Name</th>
+            <th>Service Date</th>
+            <th>Service Rendered</th>
+            <th>Clean Up</th>
+            <th>Pull Weeds</th>
+            <th>Rake</th>
+            <th>Leaf Removal</th>
+            <th>Misc. Labor</th>
+            <th>Mow Total ($)</th>
+            <th>Extras Total ($)</th>
+            <th>Order Total ($)</th>
+            <th>Notes</th>
+            <th>Action</th>
+            </tr>
+            {this.state.orders.map(
                 p => (
-                    <div ref={this.searchResult} className="customerSearchResult" key={p.customerid} id={p.customerid} onClick={this.enter} >{p.returnedQuery}</div>
+                    <tr key={p.orderid}>
+                    <td>{p.orderid}</td>
+                    <td>{p.customerid}</td>
+                    <td>{p.customerName}</td>
+                    <td>{p.service_date}</td>
+                    <td>{p.service}</td>
+                    <td>{p.cu}</td>
+                    <td>{p.pw}</td>
+                    <td>{p.r}</td>
+                    <td>{p.lr}</td>
+                    <td>{p.misc}</td>
+                    <td>{p.mow_total}</td>
+                    <td>{p.extras_total}</td>
+                    <td>{p.total}</td>
+                    <td>{p.notes}</td>
+                    <td>
+                    <div className="gridAction">
+                    <span title="Edit Customer"><img alt="edit" className="visible actionEdit" src={edit} /></span>
+                    <span title="Edit Order"><img alt="edit" className="hiddenIcon actionEdit" src={editHover} /></span>
+                    <span title="Delete Order"><img alt="delete" className="visible actionDelete" src={deleteIcon} /></span>
+                    <span onClick={() => this.deleteOrder(p.orderid)} title="Delete Customer"><img alt="delete" className="hiddenIcon actionDelete" src={deleteHover} /></span>
+                    </div>
+                    </td>
+                    </tr>
                     ))}
+                    <tr className={this.state.dataAvailable}>
+                    <td colSpan="15">No Data Available.</td>
+                    </tr>
+                    </tbody>
+                    </table>
                     </div>
-                    </div>
-                    
-                    <div className="field">
-                    <input type="text" ref={this.serviceDate} name="serviceDate" id="serviceDate" placeholder="01/01/2020" />
-                    <label htmlFor="serviceDate">Service Date</label>
-                    </div>
-                    
-                    <div className="field">
-                    <select defaultValue="" ref={this.service} name="service" id="service" >
-                    <option value="" disabled>Select...</option>
-                    <option value="MT">Mow/Trim</option>
-                    <option value="MTF">Mow/Trim (Front Yard)</option>
-                    <option value="MTB">Mow/Trim (Back Yard)</option>
-                    </select>
-                    <label htmlFor="service">Service</label>
-                    </div>
-                    
-                    <div className="field">
-                    <input type="number" ref={this.cu} name="cu" id="cu" placeholder="00" />
-                    <label htmlFor="cu">Clean Up</label>
-                    </div>
-                    
-                    <div className="field">
-                    <input type="number" ref={this.pw} name="pw" id="pw" placeholder="00" />
-                    <label htmlFor="pw">Pull Weeds</label>
-                    </div>
-                    
-                    <div className="field">
-                    <input type="number" ref={this.r} name="r" id="r" placeholder="00" />
-                    <label htmlFor="r">Rake</label>
-                    </div>
-                    
-                    <div className="field">
-                    <input type="number" ref={this.lr} name="lr" id="lr" placeholder="00" />
-                    <label htmlFor="lr">Leaf Removal</label>
-                    </div>
-                    
-                    <div className="field">
-                    <input type="number" ref={this.misc} name="misc" id="misc" placeholder="00" />
-                    <label htmlFor="misc">Misc. Labor</label>
-                    </div>
-                    
-                    <div className="field">
-                    <input type="text" ref={this.notes} name="notes" id="notes" placeholder="Enter a note..." />
-                    <label htmlFor="notes">Notes</label>
-                    </div>
-                    
-                    <button type="button" onClick={this.addOrder}>Save Order</button>
-                    
-                    </form>
                     </div>
                     );
                 }

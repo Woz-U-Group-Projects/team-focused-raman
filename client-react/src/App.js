@@ -1,9 +1,10 @@
 import React from "react";
 import NewCustomer from "./components/NewCustomer";
+import CustomerGrid from "./components/CustomerGrid";
 import NewOrder from "./components/NewOrder";
+import OrdersGrid from "./components/OrdersGrid";
 import Header from "./components/Header";
 import Navbar from "./components/Navbar";
-import CustomerSearch from "./components/CustomerSearch";
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import "./App.css";
 
@@ -13,9 +14,10 @@ function App() {
      <Header /> 
       <Router>
         <Navbar />
-        <Route path="/customers" component={NewCustomer} />
-        <Route path="/orders" component={NewOrder} />
-        <Route path="/customersearch" component={CustomerSearch} />
+        <Route path="/customers" component={CustomerGrid} />
+        <Route path="/newcustomer" component={NewCustomer} />
+        <Route path="/orders" component={OrdersGrid} />
+        <Route path="/neworder" component={NewOrder} />
       </Router>
 
       

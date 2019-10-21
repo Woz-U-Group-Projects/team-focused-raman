@@ -1,25 +1,43 @@
 package com.example.groupproject.controllers;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 // import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.example.groupproject.models.CustomerRepository;
+import com.example.groupproject.models.Order;
 //import com.example.groupproject.models.Customer;
 //import com.example.groupproject.models.Order;
 import com.example.groupproject.models.OrderDetail;
+import com.example.groupproject.models.OrderDetailRepository;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
-@Controller
+@RestController
 @RequestMapping({ "/orderdetail" })
 public class OrderDetailController {
-    @GetMapping()
+
+	  @Autowired
+	  OrderDetailRepository orderDetailRepository;
+	
+	@GetMapping("/{orderid}")
+	public Optional<OrderDetail> getOrderDetail(@PathVariable Long orderid) {
+		return orderDetailRepository.findById(orderid);
+	}
+	
+	@GetMapping()
     public @ResponseBody List<OrderDetail> getOrderDetails() {
         List<OrderDetail> orderDetails = new ArrayList<OrderDetail>();
         // Code to query the database and
@@ -150,6 +168,7 @@ public class OrderDetailController {
         	    newOrderDetail.setNotes(rs.getString("notes"));
 
         	    // add the new actor to the actors list
+        	    orderDetailRepository.save(newOrderDetail);
         		orderDetails.add(newOrderDetail);
         	}
         } catch (SQLException e) {

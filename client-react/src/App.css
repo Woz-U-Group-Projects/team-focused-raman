@@ -343,6 +343,7 @@ input:focus::-webkit-input-placeholder {
 input:not(:placeholder-shown) + label,
 input:focus + label {
   transform: translate(0, 0) scale(1);
+  color: #8C8C8C;
 }
 
 .hiddenIcon {
@@ -579,3 +580,13 @@ input:focus::-webkit-datetime-edit{ color: #000; }
   cursor: pointer;
   outline: none;
 }
+
+.notFound {
+  display: block;
+}
+
+.found {
+  display: none;
+}
+
+

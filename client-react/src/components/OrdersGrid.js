@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import edit from "../img/edit.png";
 import editHover from "../img/editHover.png";
 import deleteIcon from "../img/delete.png";
@@ -12,7 +13,8 @@ class NewOrder extends React.Component {
             orders: [],
             query: [],
             searchResults: "hidden",
-            dataAvailable: "noData"
+            dataAvailable: "noData",
+            editURL: ""
         };
         this.newOrder = React.createRef();
         this.orderid = React.createRef();
@@ -115,6 +117,14 @@ class NewOrder extends React.Component {
         })
     }
     
+    editOrder = (someOrder) => {
+        // eslint-disable-next-line
+        let url = "/editorder/" + `${someOrder}`;
+        this.setState({
+            editURL: url
+        })
+      }
+
     addOrder = () => {
         let url = "http://localhost:8080/order";
         axios.post(url, { 
@@ -191,7 +201,10 @@ class NewOrder extends React.Component {
                     <td>
                     <div className="gridAction">
                     <span title="Edit Customer"><img alt="edit" className="visible actionEdit" src={edit} /></span>
-                    <span title="Edit Order"><img alt="edit" className="hiddenIcon actionEdit" src={editHover} /></span>
+                    
+
+                    <Link to={this.state.editURL}><span onMouseOver={() => this.editOrder(p.orderid)}title="Edit Order"><img alt="edit" className="hiddenIcon actionEdit" src={editHover} /></span></Link>
+
                     <span title="Delete Order"><img alt="delete" className="visible actionDelete" src={deleteIcon} /></span>
                     <span onClick={() => this.deleteOrder(p.orderid)} title="Delete Customer"><img alt="delete" className="hiddenIcon actionDelete" src={deleteHover} /></span>
                     </div>

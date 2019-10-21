@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { Link, withRouter } from "react-router-dom";
 import edit from "../img/edit.png";
 import editHover from "../img/editHover.png";
 import deleteIcon from "../img/delete.png";
@@ -11,7 +12,7 @@ class CustomerGrid extends React.Component {
     this.state = { customers: [],
       dataAvailable: "noData",
       pageTitle: "New Customer",
-      deleteCustomer: "Jeff"
+      editURL: ""
     };
     this.firstName = React.createRef();
     this.lastName = React.createRef();
@@ -29,9 +30,23 @@ class CustomerGrid extends React.Component {
   }
   
   componentWillMount() {
+      this.forceUpdate();
     this.getData();
   }
   
+  componentDidMount() {
+    this.forceUpdate();
+
+  }
+
+  componentWillUnmount() {
+      this.setState({
+          customers: []
+      },function(){
+          this.getData();
+      });
+  }
+
   showNoData = () => {
     if(this.state.customers.length >= 1) {
       this.setState({dataAvailable: "dataIsAvailable"})
@@ -56,6 +71,14 @@ class CustomerGrid extends React.Component {
     //    })
     .then(response => {
       this.getData();
+    })
+  }
+
+  editCustomer = (someone) => {
+    // eslint-disable-next-line
+    let url = "/editcustomer/" + `${someone}`;
+    this.setState({
+        editURL: url
     })
   }
   
@@ -125,7 +148,7 @@ class CustomerGrid extends React.Component {
         <td>
         <div className="gridAction">
         <span title="Edit Customer"><img alt="edit" className="visible actionEdit" src={edit} /></span>
-        <span title="Edit Customer"><img alt="edit" className="hiddenIcon actionEdit" src={editHover} /></span>
+        <Link to={this.state.editURL}><span onMouseOver={() => this.editCustomer(p.customerid)}title="Edit Customer"><img alt="edit" className="hiddenIcon actionEdit" src={editHover} /></span></Link>
         <span title="Delete Customer"><img alt="delete" className="visible actionDelete" src={deleteIcon} /></span>
         <span onClick={() => this.deleteCustomer(p.customerid)} title="Delete Customer"><img alt="delete" className="hiddenIcon actionDelete" src={deleteHover} /></span>
         </div>
@@ -143,5 +166,5 @@ class CustomerGrid extends React.Component {
       }
     }
     
-    export default CustomerGrid;
+    export default withRouter(CustomerGrid);
     

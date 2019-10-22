@@ -242,12 +242,12 @@ class editOrder extends React.Component {
                 <label htmlFor="searchInput">Customer</label>
                 </div>
                 
-                <div className="field ">
+                <div className="field hidden">
                 <input type="number" ref={this.customerid} name="customerid" id="customerid" placeholder="1" autoComplete="off" defaultValue={p.customerid}/>
                 <label htmlFor="customerid">Customer ID</label>
                 </div>
                 
-                <div className="field ">
+                <div className="field hidden">
                 <input type="number" ref={this.orderid} name="orderid" id="orderid" placeholder="1" autoComplete="off" defaultValue={p.orderid}/>
                 <label htmlFor="orderid">Order ID</label>
                 </div>

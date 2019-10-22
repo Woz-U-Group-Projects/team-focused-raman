@@ -273,6 +273,7 @@ input, select {
   border-radius: 0;
   padding: 0;
   cursor: text;
+  margin-bottom: 1px;
 }
 
 select {
@@ -341,7 +342,8 @@ input:focus::-webkit-input-placeholder {
 * there's something in the input at all.
 */
 input:not(:placeholder-shown) + label,
-input:focus + label {
+input:focus + label,
+select + label {
   transform: translate(0, 0) scale(1);
   color: #8C8C8C;
 }
@@ -589,4 +591,15 @@ input:focus::-webkit-datetime-edit{ color: #000; }
   display: none;
 }
 
+.errorMessage {
+  color: red;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: -17px;
+  margin-bottom: -1px;
+  padding: 0;
+}
 
+.formValidate {
+  border-bottom: 1px solid red !important;
+}

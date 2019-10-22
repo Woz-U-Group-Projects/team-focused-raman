@@ -66,8 +66,10 @@ class NewOrder extends React.Component {
     }
     
     searchThis = () => {
+        this.validateCustomer();
         if(this.searchInput.current.value === '') {
             this.hideResults();
+            this.validateCustomer();
             this.customerid.current.value = '';
         } else {
             this.showResults();
@@ -78,6 +80,7 @@ class NewOrder extends React.Component {
                 this.getSearchData();
             });
             this.customerid.current.value = '';
+            this.validateCustomer();
         }
     };
     
@@ -96,6 +99,7 @@ class NewOrder extends React.Component {
     enter = (e) => {
         this.searchInput.current.value = e.target.innerHTML;
         this.customerid.current.value = e.target.id;
+        this.validateCustomer();
         this.hideResults();
     };
     
@@ -139,9 +143,70 @@ class NewOrder extends React.Component {
             this.misc.current.value = "";
             this.notes.current.value = "";
             
+            this.props.history.push('/orders');
+
         });
     };
     
+    validateForm = () => {
+        this.validateCustomer();
+        this.validateServiceDate();
+        this.validateService();
+
+        let customerid = document.getElementById("customerid");
+        let serviceDate = document.getElementById("serviceDate");
+        let service = document.getElementById("service");
+    
+        if(
+            customerid.value === "" ||
+            serviceDate.value === "" ||
+            service.value === ""
+        ) {
+          console.log("You CANNOT submit this form!")
+        } else {
+          this.addOrder();
+        }
+
+    }
+    
+
+    validateCustomer = () => {
+        let customerid = document.getElementById("customerid");
+        let searchInput = document.getElementById("searchInput");
+        let customeridErr = document.getElementById("customerErr");
+        if(customerid.value === "") {
+          customeridErr.className = "errorMessage";
+          searchInput.className = "formValidate";
+        } else {
+          customeridErr.className = "errorMessage hidden";
+          searchInput.className = "";
+        }
+    }
+
+    validateServiceDate = () => {
+        let serviceDate = document.getElementById("serviceDate");
+        let serviceDateErr = document.getElementById("serviceDateErr");
+        if(serviceDate.value === "") {
+            serviceDateErr.className = "errorMessage";
+            serviceDate.className = "formValidate";
+        } else {
+            serviceDateErr.className = "errorMessage hidden";
+            serviceDate.className = "";
+        }
+      }
+
+      validateService = () => {
+        let service = document.getElementById("service");
+        let serviceErr = document.getElementById("serviceErr");
+        if(service.value === "") {
+            serviceErr.className = "errorMessage";
+            service.className = "formValidate";
+        } else {
+            serviceErr.className = "errorMessage hidden";
+            service.className = "";
+        }
+      }
+
     render() {
         
         return (
@@ -155,6 +220,8 @@ class NewOrder extends React.Component {
             <label htmlFor="searchInput">Customer</label>
             </div>
             
+            <div id="customerErr" className="errorMessage hidden">Please choose a valid customer.</div>
+            
             <div className="field hidden">
             <input type="number" ref={this.customerid} name="customerid" id="customerid" placeholder="1" autoComplete="off" />
             <label htmlFor="customerid">Customer ID</label>
@@ -164,63 +231,69 @@ class NewOrder extends React.Component {
             <div className="searchResults">
             {this.state.query.map(
                 p => (
-                    <div ref={this.searchResult} className="customerSearchResult" key={p.customerid} id={p.customerid} onClick={this.enter} >{p.returnedQuery}</div>
-                    ))}
+                    <div ref={this.searchResult} className="customerSearchResult" key={p.customerid} id={p.customerid} onClick={this.enter} >{p.returnedQuery}
                     </div>
-                    </div>
-                    
-                    <div className="field">
-                    <input type="text" ref={this.serviceDate} name="serviceDate" id="serviceDate" placeholder="01/01/2020" />
-                    <label htmlFor="serviceDate">Service Date</label>
-                    </div>
-                    
-                    <div className="field">
-                    <select defaultValue="" ref={this.service} name="service" id="service" >
-                    <option value="" disabled>Select...</option>
-                    <option value="MT">Mow/Trim</option>
-                    <option value="MTF">Mow/Trim (Front Yard)</option>
-                    <option value="MTB">Mow/Trim (Back Yard)</option>
-                    </select>
-                    <label htmlFor="service">Service</label>
-                    </div>
-                    
-                    <div className="field">
-                    <input type="number" ref={this.cu} name="cu" id="cu" placeholder="00" />
-                    <label htmlFor="cu">Clean Up</label>
-                    </div>
-                    
-                    <div className="field">
-                    <input type="number" ref={this.pw} name="pw" id="pw" placeholder="00" />
-                    <label htmlFor="pw">Pull Weeds</label>
-                    </div>
-                    
-                    <div className="field">
-                    <input type="number" ref={this.r} name="r" id="r" placeholder="00" />
-                    <label htmlFor="r">Rake</label>
-                    </div>
-                    
-                    <div className="field">
-                    <input type="number" ref={this.lr} name="lr" id="lr" placeholder="00" />
-                    <label htmlFor="lr">Leaf Removal</label>
-                    </div>
-                    
-                    <div className="field">
-                    <input type="number" ref={this.misc} name="misc" id="misc" placeholder="00" />
-                    <label htmlFor="misc">Misc. Labor</label>
-                    </div>
-                    
-                    <div className="field">
-                    <input type="text" ref={this.notes} name="notes" id="notes" placeholder="Enter a note..." />
-                    <label htmlFor="notes">Notes</label>
-                    </div>
-                    
-                    <button type="button" onClick={this.addOrder}>Save Order</button>
-                    
-                    </form>
-                    </div>
-                    );
+                    ))
                 }
+                </div>
+                </div>
+                
+                <div className="field">
+                <input onChange={this.validateServiceDate} type="text" ref={this.serviceDate} name="serviceDate" id="serviceDate" placeholder="01/01/2020" />
+                <label htmlFor="serviceDate">Service Date</label>
+                </div>
+                
+                <div id="serviceDateErr" className="errorMessage hidden">Please choose a service date.</div>
+
+                <div className="field">
+                <select onChange={this.validateService} defaultValue="" ref={this.service} name="service" id="service" >
+                <option value="" disabled>Select...</option>
+                <option value="MT">Mow/Trim</option>
+                <option value="MTF">Mow/Trim (Front Yard)</option>
+                <option value="MTB">Mow/Trim (Back Yard)</option>
+                </select>
+                <label htmlFor="service">Service</label>
+                </div>
+                
+                <div id="serviceErr" className="errorMessage hidden">Please select a service.</div>
+
+                <div className="field">
+                <input type="number" ref={this.cu} name="cu" id="cu" placeholder="00" />
+                <label htmlFor="cu">Clean Up</label>
+                </div>
+                
+                <div className="field">
+                <input type="number" ref={this.pw} name="pw" id="pw" placeholder="00" />
+                <label htmlFor="pw">Pull Weeds</label>
+                </div>
+                
+                <div className="field">
+                <input type="number" ref={this.r} name="r" id="r" placeholder="00" />
+                <label htmlFor="r">Rake</label>
+                </div>
+                
+                <div className="field">
+                <input type="number" ref={this.lr} name="lr" id="lr" placeholder="00" />
+                <label htmlFor="lr">Leaf Removal</label>
+                </div>
+                
+                <div className="field">
+                <input type="number" ref={this.misc} name="misc" id="misc" placeholder="00" />
+                <label htmlFor="misc">Misc. Labor</label>
+                </div>
+                
+                <div className="field">
+                <input type="text" ref={this.notes} name="notes" id="notes" placeholder="Enter a note..." />
+                <label htmlFor="notes">Notes</label>
+                </div>
+                
+                <button type="button" onClick={this.validateForm}>Save Order</button>
+                
+                </form>
+                </div>
+                );
             }
-            
-            export default NewOrder;
-            
+        }
+        
+        export default NewOrder;
+        

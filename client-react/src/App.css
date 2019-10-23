@@ -414,7 +414,13 @@ input:focus::-webkit-datetime-edit{ color: #000; }
 .customerSearchResult:hover,
 .customerSearchResult:active {
   background-color: #E1E1E1;
+}
+
+.customerSearchResultActive {
+  background-color: #E1E1E1;
   transition: 0.2s ease-in-out;
+  padding: 5px;
+  cursor: pointer;
 }
 
 .customerSearchResult:not(:first-child) {
@@ -422,10 +428,10 @@ input:focus::-webkit-datetime-edit{ color: #000; }
 }
 
 .hidden {
-  display:none;
+  display: none !important;
 }
-.show{
-  display:block;
+.show {
+  display: block !important;
 }
 
 .customerSearchContainer {
@@ -543,6 +549,11 @@ input:focus::-webkit-datetime-edit{ color: #000; }
     float: right;
     display: block;
   }
+
+  .dropdown:hover .dropdown-content {
+    display: none;
+  } 
+
 }
 
 @media screen and (max-width: 600px) {

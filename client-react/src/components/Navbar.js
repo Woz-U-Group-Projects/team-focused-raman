@@ -41,16 +41,18 @@ class Navbar extends React.Component {
   
   updateDimensions() {
     var pt = document.getElementById("pageTitle");
+    var x = document.getElementById("myTopnav");
     if(window.innerWidth <= 600) {
       pt.className = "";
+      x.className = "topnav";
     } else {
       pt.className = "hidden";
     }
   }
   
   componentDidMount() {
-    //    this.updateDimensions();
-    //    window.addEventListener("resize", this.updateDimensions.bind(this));
+    this.updateDimensions();
+        window.addEventListener("resize", this.updateDimensions.bind(this));
   }
   
   componentWillUnmount() {
@@ -69,24 +71,67 @@ class Navbar extends React.Component {
     }
   }
 
-  closeMenu = (e) => {
-    this.setState({
-      pageTitle: e.target.innerHTML
-    }, function() {
-      var x = document.getElementById("myTopnav");
-      var pt = document.getElementById("pageTitle");
-      if (x.className === "navbar responsive") {
-        x.className = "navbar backgroundAnimated";
-        pt.className = "";
-      } else {
-        x.className = "navbar";
-        pt.className = "hidden";
-      }
-      console.log(this.state.pageTitle);
-    })
+//  closeMenu = (e) => {
+//    this.setState({
+//      pageTitle: e.target.innerHTML
+//    }, function() {
+//      var x = document.getElementById("myTopnav");
+//      var pt = document.getElementById("pageTitle");
+//      if (x.className === "navbar responsive") {
+//        x.className = "navbar backgroundAnimated";
+//        pt.className = "";
+//      } else {
+//        x.className = "navbar";
+//        pt.className = "hidden";
+//      }
+//      console.log(this.state.pageTitle);
+//    })
+//  }
+
+  closeDropdown = (e) => {
+    let dropdownContent = document.getElementsByClassName("dropdown-content");
+    let myTopnav = document.getElementById("myTopnav");
     
+    for(var i = 0; i < dropdownContent.length; i++){
+      dropdownContent[i].className = "dropdown-content hidden";
+    }
+    
+    myTopnav.className = "topnav"
+
   }
-  
+
+  setDropdownsClick = (e) => {
+    let dropdownContent = document.getElementsByClassName("dropdown-content");
+
+    if(window.innerWidth <= 600) {
+      if(e.target.nextSibling.className === "dropdown-content" || e.target.nextSibling.className === "dropdown-content hidden") {
+        
+        let dropdownContent = document.getElementsByClassName("dropdown-content");        
+        for(var v = 0; v < dropdownContent.length; v++){
+          dropdownContent[v].className = "dropdown-content";
+        }
+
+        e.target.nextSibling.className = "dropdown-content show";
+      } else {
+        e.target.nextSibling.className = "dropdown-content";      
+      }
+    } else {
+      for(var i = 0; i < dropdownContent.length; i++){
+        dropdownContent[i].className = "dropdown-content";
+      }
+    }
+  }
+
+  setDropdowns = (e) => {
+    let dropdownContent = document.getElementsByClassName("dropdown-content");
+
+    if(window.innerWidth <= 600) {
+    } else {
+      for(var i = 0; i < dropdownContent.length; i++){
+        dropdownContent[i].className = "dropdown-content";
+      }
+    }
+  }
   
   
   render() {
@@ -97,32 +142,32 @@ class Navbar extends React.Component {
       <div id="pageTitle"></div>
 
       <div className="dropdown">
-      <button className="dropbtn">Customers&nbsp;&nbsp;
+      <button onClick={this.setDropdownsClick} onMouseEnter={this.setDropdowns} className="dropbtn">Customers&nbsp;&nbsp;
       <i className="fa fa-caret-down"></i>
       </button>
       <div className="dropdown-content">
-      <Link to="/newcustomer">New Customer</Link>
-      <Link to="/customers">View Customers</Link>
+      <Link onClick={this.closeDropdown} to="/newcustomer">New Customer</Link>
+      <Link onClick={this.closeDropdown} to="/customers">View Customers</Link>
       </div>
       </div>
 
       <div className="dropdown">
-      <button className="dropbtn">Orders&nbsp;&nbsp;
+      <button onClick={this.setDropdownsClick} onMouseEnter={this.setDropdowns} className="dropbtn">Orders&nbsp;&nbsp;
       <i className="fa fa-caret-down"></i>
       </button>
       <div className="dropdown-content">
-      <Link to="/neworder">New Order</Link>
-      <Link to="/orders">View Orders</Link>
+      <Link onClick={this.closeDropdown} to="/neworder">New Order</Link>
+      <Link onClick={this.closeDropdown} to="/orders">View Orders</Link>
       </div>
       </div> 
 
       <div className="dropdown">
-      <button className="dropbtn">Reports&nbsp;&nbsp;
+      <button onClick={this.setDropdownsClick} onMouseEnter={this.setDropdowns} className="dropbtn">Reports&nbsp;&nbsp;
       <i className="fa fa-caret-down"></i>
       </button>
       <div className="dropdown-content">
-      <Link to="/orders">Totals by Date</Link>
-      <Link to="/neworder">Totals by Customer</Link>
+      <Link onClick={this.closeDropdown} to="/orders">Totals by Date</Link>
+      <Link onClick={this.closeDropdown} to="/neworder">Totals by Customer</Link>
       </div>
       </div> 
 

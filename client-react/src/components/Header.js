@@ -8,7 +8,7 @@ function Header() {
   return (
     <div className="header">
         <div className="logoStrip">
-            <img src={logo} alt="logo" className="logoSmall"/><span className="words"><span className="greenBoy"><span className="cutWords">CUT</span><span className="ampersand">&</span><span className="trimWords">TRIM</span></span></span>
+            <img src={logo} id="logoSmall" alt="logo" className="logoSmall"/><span className="words"><span className="greenBoy"><span className="cutWords">CUT</span><span className="ampersand">&</span><span className="trimWords">TRIM</span></span></span>
         </div>
     </div>
   );

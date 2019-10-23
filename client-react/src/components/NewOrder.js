@@ -8,7 +8,8 @@ class NewOrder extends React.Component {
             orders: [],
             query: [],
             searchResults: "hidden",
-            dataAvailable: "noData"
+            dataAvailable: "noData",
+            downCount: -1
         };
         this.newOrder = React.createRef();
         this.orderid = React.createRef();
@@ -31,14 +32,11 @@ class NewOrder extends React.Component {
         // bound functions
         this.enter = this.enter.bind(this);
         this.selectContents = this.selectContents.bind(this);
+        this.checkKey = this.checkKey.bind(this);
     }
     
     componentWillMount() {
-        this.getData();
         this.getSearchData();
-    }
-    
-    componentDidMount() {
     }
     
     showNoData = () => {
@@ -69,8 +67,8 @@ class NewOrder extends React.Component {
         this.validateCustomer();
         if(this.searchInput.current.value === '') {
             this.hideResults();
-            this.validateCustomer();
             this.customerid.current.value = '';
+            this.validateCustomer();
         } else {
             this.showResults();
             let url = "http://localhost:8080/customersearchinput";
@@ -79,17 +77,83 @@ class NewOrder extends React.Component {
             }).then(response => {
                 this.getSearchData();
             });
-            this.customerid.current.value = '';
             this.validateCustomer();
+            this.customerid.current.value = '';
         }
     };
     
-    getData = () => {
-        let url = "http://localhost:8080/orderdetail";
-        axios.get(url).then(response => this.setState({ orders: response.data },function() {
-            this.showNoData();
-        }));
-    };
+    checkKey = (e) => {
+
+        var limitHigh = document.getElementById("searchResults").childElementCount - 1;
+        var limitLow = 0;
+        var myCount = this.state.downCount;
+
+        if (e.keyCode === 40) {
+            // down arrow
+            myCount = myCount + 1;
+
+            if(myCount < limitLow) {
+                myCount = 0;
+            } 
+
+            if(myCount >= limitHigh) {
+                myCount = limitHigh;
+            } 
+
+            if(myCount !== limitLow) {
+                document.getElementById("searchResults").childNodes[myCount - 1].className = "customerSearchResult";           
+            }
+            if(myCount < limitHigh - 1) {
+                document.getElementById("searchResults").childNodes[myCount + 1].className = "customerSearchResult";           
+            }
+            
+            document.getElementById("searchResults").childNodes[myCount].className = "customerSearchResultActive";           
+
+            this.setState({
+                downCount: myCount
+            })
+
+        }
+        
+        else if (e.keyCode === 38) {
+            // up arrow
+            myCount = myCount - 1;
+
+            if(myCount < limitLow) {
+                myCount = 0;
+            } 
+
+            if(myCount >= limitHigh) {
+                myCount = limitHigh;
+            } 
+
+            if(myCount !== limitLow) {
+                document.getElementById("searchResults").childNodes[myCount - 1].className = "customerSearchResult";           
+            }
+            if(myCount < limitHigh) {
+                document.getElementById("searchResults").childNodes[myCount + 1].className = "customerSearchResult";           
+            }
+            
+            document.getElementById("searchResults").childNodes[myCount].className = "customerSearchResultActive";      
+
+            this.setState({
+                downCount: myCount
+            })
+            
+        }
+
+        else if (e.keyCode === 13) {
+            // enter
+            document.getElementById("searchResults").childNodes[myCount].click();           
+        }
+    }
+
+//    getData = () => {
+//        let url = "http://localhost:8080/orderdetail";
+//        axios.get(url).then(response => this.setState({ orders: response.data },function() {
+//            this.showNoData();
+//        }));
+//    };
     
     getSearchData = () => {
         let url = "http://localhost:8080/customersearch";
@@ -103,17 +167,17 @@ class NewOrder extends React.Component {
         this.hideResults();
     };
     
-    deleteOrder = (someOrder) => {
-        // eslint-disable-next-line
-        let url = "http://localhost:8080/order/" + `${someOrder}`
-        axios.delete(url)
-        //    .catch(function (error) {
-        //      console.log("Deletion failed with error: " + error);
-        //    })
-        .then(response => {
-            this.getData();
-        })
-    }
+//    deleteOrder = (someOrder) => {
+//        // eslint-disable-next-line
+//        let url = "http://localhost:8080/order/" + `${someOrder}`
+//        axios.delete(url)
+//        //    .catch(function (error) {
+//        //      console.log("Deletion failed with error: " + error);
+//        //    })
+//        .then(response => {
+//            this.getData();
+//        })
+//    }
     
     addOrder = () => {
         let url = "http://localhost:8080/order";
@@ -127,24 +191,8 @@ class NewOrder extends React.Component {
             lr: this.lr.current.value,
             misc: this.misc.current.value,
             notes: this.notes.current.value,     
-        }).then(response => {
-            // refresh the data
-            this.getData();
-            
-            // empty the input            
-            this.customerid.current.value = "";
-            this.searchInput.current.value = "";
-            this.serviceDate.current.value = "";
-            this.service.current.value = "";
-            this.cu.current.value = "";
-            this.pw.current.value = "";
-            this.r.current.value = "";
-            this.lr.current.value = "";
-            this.misc.current.value = "";
-            this.notes.current.value = "";
-            
+        }).then(response => {            
             this.props.history.push('/orders');
-
         });
     };
     
@@ -162,7 +210,7 @@ class NewOrder extends React.Component {
             serviceDate.value === "" ||
             service.value === ""
         ) {
-          console.log("You CANNOT submit this form!")
+            // DO NOTHING
         } else {
           this.addOrder();
         }
@@ -216,7 +264,7 @@ class NewOrder extends React.Component {
             <form action="">
             
             <div className="field">
-            <input onChange={this.searchThis} onFocus={this.selectContents} type="text" ref={this.searchInput} name="searchInput" id="searchInput" placeholder="Type to Search..." autoComplete="off" />
+            <input autoFocus onKeyDown={this.checkKey} onChange={this.searchThis} onFocus={this.selectContents} type="text" ref={this.searchInput} name="searchInput" id="searchInput" placeholder="Type to Search..." autoComplete="off" />
             <label htmlFor="searchInput">Customer</label>
             </div>
             
@@ -228,7 +276,7 @@ class NewOrder extends React.Component {
             </div>
             
             <div ref={this.searchResults} className={this.state.searchResults}>
-            <div className="searchResults">
+            <div id="searchResults" className="searchResults">
             {this.state.query.map(
                 p => (
                     <div ref={this.searchResult} className="customerSearchResult" key={p.customerid} id={p.customerid} onClick={this.enter} >{p.returnedQuery}

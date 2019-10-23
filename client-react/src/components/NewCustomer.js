@@ -28,6 +28,10 @@ class NewCustomer extends React.Component {
   componentWillMount() {
     this.getData();
   }
+
+//  componentDidMount() {
+//    this.firstName.focus();
+//  }
   
   showNoData = () => {
     if(this.state.customers.length >= 1) {
@@ -48,9 +52,6 @@ class NewCustomer extends React.Component {
     // eslint-disable-next-line
     let url = "http://localhost:8080/customer/" + `${someone}`
     axios.delete(url)
-    //    .catch(function (error) {
-    //      console.log("Deletion failed with error: " + error);
-    //    })
     .then(response => {
       this.getData();
     })
@@ -71,21 +72,7 @@ class NewCustomer extends React.Component {
       day: this.day.current.value,
     }).then(response => {
       // refresh the data
-      this.getData();
-      // empty the input
-      this.firstName.current.value = "";
-      this.lastName.current.value = "";
-      this.email.current.value = "";
-      this.phone.current.value = "";
-      this.mtrate.current.value = "";
-      this.mtfrate.current.value = "";
-      this.mtbrate.current.value = "";
-      this.paymentType.current.value = "";
-      this.basis.current.value = "";
-      this.day.current.value = "";
-
       this.props.history.push('/customers');
-
     });
   };
   
@@ -106,7 +93,7 @@ class NewCustomer extends React.Component {
       mtrate.value === "" ||
       paymentType.value === ""
     ) {
-      console.log("You CANNOT submit this form!")
+      // DO NOTHING
     } else {
       this.addCustomer();
     }
@@ -169,7 +156,7 @@ class NewCustomer extends React.Component {
       <form action="">
       
       <div className="field">
-      <input onChange={this.validateFirstName} type="text" ref={this.firstName} name="firstName" id="firstName" placeholder="Jane" />
+      <input autoFocus onChange={this.validateFirstName} type="text" ref={this.firstName} name="firstName" id="firstName" placeholder="Jane" />
       <label htmlFor="firstName">First Name</label>
       </div>
       

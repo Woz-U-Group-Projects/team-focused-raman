@@ -14,7 +14,8 @@ class editOrder extends React.Component {
             dataAvailable: "noData",
             activeOrder: "",
             activeCustomer: "",
-            orderFound: "found"
+            orderFound: "found",
+            downCount: -1
         };
         this.newOrder = React.createRef();
         this.orderid = React.createRef();
@@ -37,6 +38,7 @@ class editOrder extends React.Component {
         // bound functions
         this.enter = this.enter.bind(this);
         this.selectContents = this.selectContents.bind(this);
+        this.checkKey = this.checkKey.bind(this);
     }
     
     componentWillMount() {
@@ -51,9 +53,6 @@ class editOrder extends React.Component {
             this.getOrderDetail();
             this.getData();
         });
-    }
-    
-    componentDidMount() {
     }
     
     showNoData = () => {
@@ -81,9 +80,11 @@ class editOrder extends React.Component {
     }
     
     searchThis = () => {
+        this.validateCustomer();
         if(this.searchInput.current.value === '') {
             this.hideResults();
             this.customerid.current.value = '';
+            this.validateCustomer();
         } else {
             this.showResults();
             let url = "http://localhost:8080/customersearchinput";
@@ -92,6 +93,7 @@ class editOrder extends React.Component {
             }).then(response => {
                 this.getSearchData();
             });
+            this.validateCustomer();
             this.customerid.current.value = '';
         }
     };
@@ -156,6 +158,7 @@ class editOrder extends React.Component {
     enter = (e) => {
         this.searchInput.current.value = e.target.innerHTML;
         this.customerid.current.value = e.target.id;
+        this.validateCustomer();
         this.hideResults();
     };
     
@@ -170,38 +173,7 @@ class editOrder extends React.Component {
             this.getData();
         })
     }
-    
-    addOrder = () => {
-        let url = "http://localhost:8080/order";
-        axios.post(url, { 
-            customerid: this.customerid.current.value,
-            serviceDate: this.serviceDate.current.value,
-            service: this.service.current.value,
-            cu: this.cu.current.value,
-            pw: this.pw.current.value,
-            r: this.r.current.value,
-            lr: this.lr.current.value,
-            misc: this.misc.current.value,
-            notes: this.notes.current.value,     
-        }).then(response => {
-            // refresh the data
-            this.getData();
-            
-            // empty the input            
-            this.customerid.current.value = "";
-            this.searchInput.current.value = "";
-            this.serviceDate.current.value = "";
-            this.service.current.value = "";
-            this.cu.current.value = "";
-            this.pw.current.value = "";
-            this.r.current.value = "";
-            this.lr.current.value = "";
-            this.misc.current.value = "";
-            this.notes.current.value = "";
-            
-        });
-    };
-    
+        
     updateOrder = () => {
         // eslint-disable-next-line
         let url = "http://localhost:8080/order/" + `${this.orderid.current.value}`;
@@ -217,15 +189,139 @@ class editOrder extends React.Component {
             notes: this.notes.current.value,
         })
         .then(response => {
-            // this.showSuccess();
-            //            setTimeout( function() {
-            //                console.log(this.props.history);
-            //                window.location.replace("/customers");
             this.props.history.push('/orders');
-            //            }, 1000)
         });
     }
     
+    validateForm = () => {
+        this.validateCustomer();
+        this.validateServiceDate();
+        this.validateService();
+
+        let customerid = document.getElementById("customerid");
+        let serviceDate = document.getElementById("serviceDate");
+        let service = document.getElementById("service");
+    
+        if(
+            customerid.value === "" ||
+            serviceDate.value === "" ||
+            service.value === ""
+        ) {
+            // DO NOTHING
+        } else {
+          this.updateOrder();
+        }
+
+    }
+
+    validateCustomer = () => {
+        let customerid = document.getElementById("customerid");
+        let searchInput = document.getElementById("searchInput");
+        let customeridErr = document.getElementById("customerErr");
+        if(customerid.value === "") {
+          customeridErr.className = "errorMessage";
+          searchInput.className = "formValidate";
+        } else {
+          customeridErr.className = "errorMessage hidden";
+          searchInput.className = "";
+        }
+    }
+
+    validateServiceDate = () => {
+        let serviceDate = document.getElementById("serviceDate");
+        let serviceDateErr = document.getElementById("serviceDateErr");
+        if(serviceDate.value === "") {
+            serviceDateErr.className = "errorMessage";
+            serviceDate.className = "formValidate";
+        } else {
+            serviceDateErr.className = "errorMessage hidden";
+            serviceDate.className = "";
+        }
+      }
+
+      validateServiceDate2 = (e) => {
+        if (e.keyCode === 8 || e.keyCode === 46) {
+            this.validateServiceDate();
+        }
+      }
+
+      validateService = () => {
+        let service = document.getElementById("service");
+        let serviceErr = document.getElementById("serviceErr");
+        if(service.value === "") {
+            serviceErr.className = "errorMessage";
+            service.className = "formValidate";
+        } else {
+            serviceErr.className = "errorMessage hidden";
+            service.className = "";
+        }
+      }
+
+      checkKey = (e) => {
+
+        var limitHigh = document.getElementById("searchResults").childElementCount - 1;
+        var limitLow = 0;
+        var myCount = this.state.downCount;
+
+        if (e.keyCode === 40) {
+            // down arrow
+            myCount = myCount + 1;
+
+            if(myCount < limitLow) {
+                myCount = 0;
+            } 
+
+            if(myCount >= limitHigh) {
+                myCount = limitHigh;
+            } 
+
+            if(myCount !== limitLow) {
+                document.getElementById("searchResults").childNodes[myCount - 1].className = "customerSearchResult";           
+            }
+            if(myCount < limitHigh - 1) {
+                document.getElementById("searchResults").childNodes[myCount + 1].className = "customerSearchResult";           
+            }
+            
+            document.getElementById("searchResults").childNodes[myCount].className = "customerSearchResultActive";           
+
+            this.setState({
+                downCount: myCount
+            })
+
+        }
+        
+        else if (e.keyCode === 38) {
+            // up arrow
+            myCount = myCount - 1;
+
+            if(myCount < limitLow) {
+                myCount = 0;
+            } 
+
+            if(myCount >= limitHigh) {
+                myCount = limitHigh;
+            } 
+
+            if(myCount !== limitLow) {
+                document.getElementById("searchResults").childNodes[myCount - 1].className = "customerSearchResult";           
+            }
+            if(myCount < limitHigh) {
+                document.getElementById("searchResults").childNodes[myCount + 1].className = "customerSearchResult";           
+            }
+            
+            document.getElementById("searchResults").childNodes[myCount].className = "customerSearchResultActive";      
+
+            this.setState({
+                downCount: myCount
+            })       
+        }
+
+        else if (e.keyCode === 13) {
+            // enter
+            document.getElementById("searchResults").childNodes[myCount].click();           
+        }
+    }
+
     render() {
         
         return (
@@ -238,10 +334,12 @@ class editOrder extends React.Component {
                 <h3>Edit Order (#{p.orderid})</h3>
                 
                 <div className="field">
-                <input onChange={this.searchThis} onFocus={this.selectContents} type="text" ref={this.searchInput} name="searchInput" id="searchInput" placeholder="Type to Search..." autoComplete="off" defaultValue={this.state.activeCustomer}/>
+                <input onKeyDown={this.checkKey} onChange={this.searchThis} onFocus={this.selectContents} type="text" ref={this.searchInput} name="searchInput" id="searchInput" placeholder="Type to Search..." autoComplete="off" defaultValue={this.state.activeCustomer}/>
                 <label htmlFor="searchInput">Customer</label>
                 </div>
                 
+                <div id="customerErr" className="errorMessage hidden">Please choose a valid customer.</div>
+
                 <div className="field hidden">
                 <input type="number" ref={this.customerid} name="customerid" id="customerid" placeholder="1" autoComplete="off" defaultValue={p.customerid}/>
                 <label htmlFor="customerid">Customer ID</label>
@@ -257,7 +355,7 @@ class editOrder extends React.Component {
             }
             
             <div ref={this.searchResults} className={this.state.searchResults}>
-            <div className="searchResults">
+            <div id="searchResults" className="searchResults">
             
             {this.state.query.map(p => (
                 <div ref={this.searchResult} className="customerSearchResult" key={p.returnedQuery} id={p.customerid} onClick={this.enter} >{p.returnedQuery}</div>
@@ -272,12 +370,14 @@ class editOrder extends React.Component {
                 
                 
                 <div className="field">
-                <input type="text" ref={this.serviceDate} name="serviceDate" id="serviceDate" placeholder="01/01/2020" defaultValue={p.serviceDate}/>
+                <input onKeyDown={this.validateServiceDate2} onChange={this.validateServiceDate} type="text" ref={this.serviceDate} name="serviceDate" id="serviceDate" placeholder="01/01/2020" defaultValue={p.serviceDate}/>
                 <label htmlFor="serviceDate">Service Date</label>
                 </div>
                 
+                <div id="serviceDateErr" className="errorMessage hidden">Please choose a service date.</div>
+
                 <div className="field">
-                <select defaultValue={p.service} ref={this.service} name="service" id="service" >
+                <select onChange={this.validateService} defaultValue={p.service} ref={this.service} name="service" id="service" >
                 <option value="" disabled>Select...</option>
                 <option value="MT">Mow/Trim</option>
                 <option value="MTF">Mow/Trim (Front Yard)</option>
@@ -285,6 +385,8 @@ class editOrder extends React.Component {
                 </select>
                 <label htmlFor="service">Service</label>
                 </div>
+                
+                <div id="serviceErr" className="errorMessage hidden">Please select a service.</div>
                 
                 <div className="field">
                 <input type="number" ref={this.cu} name="cu" id="cu" placeholder="00" defaultValue={p.cu} />
@@ -316,7 +418,7 @@ class editOrder extends React.Component {
                 <label htmlFor="notes">Notes</label>
                 </div>
                 
-                <button type="button" onClick={this.updateOrder}>Update Order</button>
+                <button type="button" onClick={this.validateForm}>Update Order</button>
                 
                 </form>
                 

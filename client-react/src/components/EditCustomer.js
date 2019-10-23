@@ -85,44 +85,11 @@ class EditCustomer extends React.Component {
         // eslint-disable-next-line
         let url = "http://localhost:8080/customer/" + `${someone}`
         axios.delete(url)
-        //    .catch(function (error) {
-        //      console.log("Deletion failed with error: " + error);
-        //    })
         .then(response => {
             this.getData();
         })
     }
-    
-    addCustomer = () => {
-        let url = "http://localhost:8080/customer";
-        axios.post(url, { 
-            firstName: this.firstName.current.value,
-            lastName: this.lastName.current.value,
-            email: this.email.current.value,
-            phone: this.phone.current.value,
-            mtrate: this.mtrate.current.value,
-            mtfrate: this.mtfrate.current.value,
-            mtbrate: this.mtbrate.current.value,
-            paymentType: this.paymentType.current.value,
-            basis: this.basis.current.value,
-            day: this.day.current.value,
-        }).then(response => {
-            // refresh the data
-            this.getData();
-            // empty the input
-            this.firstName.current.value = "";
-            this.lastName.current.value = "";
-            this.email.current.value = "";
-            this.phone.current.value = "";
-            this.mtrate.current.value = "";
-            this.mtfrate.current.value = "";
-            this.mtbrate.current.value = "";
-            this.paymentType.current.value = "";
-            this.basis.current.value = "";
-            this.day.current.value = "";
-        });
-    };
-    
+        
     updateCustomer = () => {
         // eslint-disable-next-line
         let url = "http://localhost:8080/customer/" + `${this.customerid.current.value}`;
@@ -140,11 +107,7 @@ class EditCustomer extends React.Component {
         })
         .then(response => {
             this.showSuccess();
-//            setTimeout( function() {
-//                console.log(this.props.history);
-//                window.location.replace("/customers");
                   this.props.history.push('/customers');
-//            }, 1000)
         });
     }
     
@@ -152,6 +115,77 @@ class EditCustomer extends React.Component {
         var checkmark = document.getElementById("success-checkmark");
             checkmark.className = "success-checkmark"
     }
+
+    validateForm = () => {
+        this.validateFirstName();
+        this.validateLastName();
+        this.validateMowTrim();
+        this.validatePaymentType();
+    
+        let firstName = document.getElementById("firstName");
+        let lastName = document.getElementById("lastName");
+        let mtrate = document.getElementById("mtrate");
+        let paymentType = document.getElementById("paymentType");
+    
+        if(
+          firstName.value === "" ||
+          lastName.value === "" ||
+          mtrate.value === "" ||
+          paymentType.value === ""
+        ) {
+          // DO NOTHING
+        } else {
+          this.updateCustomer();
+        }
+      }
+    
+      validateFirstName = () => {
+        let firstName = document.getElementById("firstName");
+        let firstNameErr = document.getElementById("firstNameErr");
+        if(firstName.value === "") {
+          firstNameErr.className = "errorMessage";
+          firstName.className = "formValidate";
+        } else {
+          firstNameErr.className = "errorMessage hidden";
+          firstName.className = "";
+        }
+      }
+    
+      validateLastName = () => {
+        let lastName = document.getElementById("lastName");
+        let lastNameErr = document.getElementById("lastNameErr");
+        if(lastName.value === "") {
+          lastNameErr.className = "errorMessage";
+          lastName.className = "formValidate";
+        } else {
+          lastNameErr.className = "errorMessage hidden";
+          lastName.className = "";
+        }
+      }
+    
+      validateMowTrim = () => {
+        let mtrate = document.getElementById("mtrate");
+        let mtErr = document.getElementById("mtErr");
+        if(mtrate.value === "") {
+          mtErr.className = "errorMessage";
+          mtrate.className = "formValidate";
+        } else {
+          mtErr.className = "errorMessage hidden";
+          mtrate.className = "";
+        }
+      }
+    
+      validatePaymentType = () => {
+        let paymentType = document.getElementById("paymentType");
+        let paymentTypeErr = document.getElementById("paymentTypeErr");
+        if(paymentType.value === "") {
+          paymentTypeErr.className = "errorMessage";
+          paymentType.className = "formValidate";
+        } else {
+          paymentTypeErr.className = "errorMessage hidden";
+          paymentType.className = "";
+        }
+      }
 
     render() {
         
@@ -170,15 +204,19 @@ class EditCustomer extends React.Component {
                 </div>
                 
                 <div className="field">
-                <input type="text" ref={this.firstName} name="firstName" id="firstName" placeholder="Jane" defaultValue={p.firstName}/>
+                <input onChange={this.validateFirstName} type="text" ref={this.firstName} name="firstName" id="firstName" placeholder="Jane" defaultValue={p.firstName}/>
                 <label htmlFor="firstName">First Name</label>
                 </div>
                 
+                <div id="firstNameErr" className="errorMessage hidden">Please enter first name.</div>
+
                 <div className="field">
-                <input type="text" ref={this.lastName} name="lastName" id="lastName" placeholder="Appleseed" defaultValue={p.lastName}/>
+                <input onChange={this.validateLastName} type="text" ref={this.lastName} name="lastName" id="lastName" placeholder="Appleseed" defaultValue={p.lastName}/>
                 <label htmlFor="lastName">Last Name</label>
                 </div>
                 
+                <div id="lastNameErr" className="errorMessage hidden">Please enter last name.</div>
+
                 <div className="field">
                 <input type="number" ref={this.phone} name="phone" id="phone" placeholder="(123) 456-7890" defaultValue={p.phone}/>
                 <label htmlFor="phone">Phone</label>
@@ -190,9 +228,11 @@ class EditCustomer extends React.Component {
                 </div>
                 
                 <div className="field">
-                <input type="number" ref={this.mtrate} name="mtrate" id="mtrate" placeholder="$100.00" defaultValue={p.mtrate}/>
+                <input onChange={this.validateMowTrim} type="number" ref={this.mtrate} name="mtrate" id="mtrate" placeholder="$100.00" defaultValue={p.mtrate}/>
                 <label htmlFor="mtrate">Mow/Trim Rate</label>
                 </div>
+
+                <div id="mtErr" className="errorMessage hidden">Please enter mow/trim rate.</div>
                 
                 <div className="field">
                 <input type="number" ref={this.mtfrate} name="mtfrate" id="mtfrate" placeholder="$100.00" defaultValue={p.mtfrate}/>
@@ -205,7 +245,7 @@ class EditCustomer extends React.Component {
                 </div>
                 
                 <div className="field">
-                <select ref={this.paymentType} name="paymentType" id="paymentType" defaultValue={p.paymentType}>
+                <select onChange={this.validatePaymentType} ref={this.paymentType} name="paymentType" id="paymentType" defaultValue={p.paymentType}>
                 <option value="" disabled>Select...</option>
                 <option value="Cash">Cash</option>
                 <option value="Credit">Credit</option>
@@ -213,6 +253,8 @@ class EditCustomer extends React.Component {
                 <label htmlFor="paymentType">Payment Type</label>
                 </div>
                 
+                <div id="paymentTypeErr" className="errorMessage hidden">Please choose a payment type.</div>
+
                 <div className="field">
                 <select ref={this.basis} name="basis" id="basis" defaultValue={p.basis}>
                 <option value="" disabled>Select...</option>
@@ -236,7 +278,7 @@ class EditCustomer extends React.Component {
                 <label htmlFor="day">Day</label>
                 </div>
                 
-                <button type="button" onClick={this.updateCustomer}>Update Customer</button>
+                <button type="button" onClick={this.validateForm}>Update Customer</button>
                 
                 </form>
                 ))}

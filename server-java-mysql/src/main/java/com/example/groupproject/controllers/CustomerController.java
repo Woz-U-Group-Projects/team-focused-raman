@@ -60,6 +60,14 @@ public class CustomerController {
     	foundCustomer.setLastName(customer.getLastName());
     	foundCustomer.setPhone(customer.getPhone());
     	foundCustomer.setEmail(customer.getEmail());
+    	
+    	foundCustomer.setAddress1(customer.getAddress1());
+    	foundCustomer.setAddress2(customer.getAddress2());
+    	foundCustomer.setCity(customer.getCity());
+    	foundCustomer.setState1(customer.getState1());
+    	foundCustomer.setZip(customer.getZip());
+    	foundCustomer.setCountry(customer.getCountry());
+    	
     	foundCustomer.setMtrate(customer.getMtrate());
     	foundCustomer.setMtfrate(customer.getMtfrate());
     	foundCustomer.setMtbrate(customer.getMtbrate());

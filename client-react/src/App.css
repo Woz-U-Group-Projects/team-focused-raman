@@ -187,6 +187,11 @@
   .customer {
     margin: 10px;
     position: relative;
+    max-width: 1500px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
   .customer h3 {
@@ -197,12 +202,12 @@
   .customer button {
     display: block;
     margin: 10px 0;
-    font-size: 13px;
+    font-size: 15px;
     background-color: #4CAF50;
     color: snow;
     font-weight: 600;
     line-height: 30px;
-    padding: 0 10px;
+    padding: 5px 15px;
     cursor: pointer;
     outline: none;
   }
@@ -333,8 +338,10 @@ label {
 /**
 * Show the placeholder when the input is focused.
 */
-input:focus::-webkit-input-placeholder {
+input:focus::-webkit-input-placeholder,
+textarea:focus::-webkit-input-placeholder {
   opacity: 1;
+  transition: 0.2s ease-in-out;
 }
 /**
 * When the element is focused, remove the label transform.
@@ -389,9 +396,6 @@ select + label {
   overflow-x: scroll;
 }
 
-input::-webkit-datetime-edit{ color: transparent; }
-input:focus::-webkit-datetime-edit{ color: #000; }
-
 .gridTable {
   min-width: 100%;
 }
@@ -399,10 +403,10 @@ input:focus::-webkit-datetime-edit{ color: #000; }
 .searchResults {
   border: 1px solid #BDBDBD;
   display: inline-block;
-  width: calc(100% - 2px);
+  width: calc(50% - 17px);
   background-color: #F0F0F0;
   position: absolute;
-  top: 80px;
+  top: 100px;
   z-index: 1 !important;
 }
 
@@ -613,4 +617,77 @@ input:focus::-webkit-datetime-edit{ color: #000; }
 
 .formValidate {
   border-bottom: 1px solid red !important;
+}
+
+.customer textarea {
+  resize: none;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+  padding: 10px;
+}
+
+/* REPSONSIVE FORM */
+
+.formSubHeader {
+  color: #505050;
+  margin: 0;
+  margin-bottom: -3px;
+  margin-top: 10px;
+}
+
+.responsiveFormContainer {
+  display: flex;
+  flex-direction: row;
+
+}
+
+.responsiveFormContainer input,
+.responsiveFormContainer select {
+  background-color: rgba(0,0,0,0);
+}
+
+.responsiveForm {
+  min-width: calc(50% - 5px);
+
+}
+
+.responsiveForm:not(:first-child) {
+  margin-left: 5px;
+}
+
+.responsiveForm:first-child {
+  margin-right: 5px;
+}
+
+@media screen and (max-width: 600px) {
+  .responsiveFormContainer {
+    flex-direction: column;
+  }
+
+  .responsiveForm {
+    min-width: 100%;
+    margin: 0;
+  }
+
+  .responsiveForm:not(:first-child) {
+    margin-left: 0px;
+  }
+
+  .responsiveButton {
+    width: 100%;
+    height: 60px;
+    font-size: 20px !important;
+  }
+
+  .searchResults {
+    border: 1px solid #BDBDBD;
+    display: inline-block;
+    width: calc(100% - 22px);
+    background-color: #F0F0F0;
+    position: absolute;
+    top: 100px;
+    z-index: 1 !important;
+  }
+
 }

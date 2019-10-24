@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.groupproject.models.Customer;
+// import com.example.groupproject.models.Customer;
 import com.example.groupproject.models.Order;
 import com.example.groupproject.models.OrderRepository;
 

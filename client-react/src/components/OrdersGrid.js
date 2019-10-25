@@ -11,10 +11,13 @@ class NewOrder extends React.Component {
         super(props);
         this.state = { 
             orders: [],
+            currentPage: [],
             query: [],
             searchResults: "hidden",
             dataAvailable: "noData",
-            editURL: ""
+            editURL: "",
+            resultsPerPage: 3,
+            pageNumber: 1
         };
         this.newOrder = React.createRef();
         this.orderid = React.createRef();
@@ -91,6 +94,7 @@ class NewOrder extends React.Component {
         let url = "http://localhost:8080/orderdetail";
         axios.get(url).then(response => this.setState({ orders: response.data },function() {
             this.showNoData();
+            this.setDataPerPage();
         }));
     };
     
@@ -155,6 +159,159 @@ class NewOrder extends React.Component {
             
         });
     };
+
+    setDataPerPage = () => {
+        let recordLow = this.state.pageNumber * this.state.resultsPerPage - this.state.resultsPerPage;
+        let recordHigh = this.state.pageNumber * this.state.resultsPerPage - 1;
+        let currentPageData = [];
+        let recordLimit = document.getElementById("helperGrid").childNodes.length;
+        let ceil = Math.ceil(document.getElementById("helperGrid").childNodes.length / this.state.resultsPerPage);
+        let highestPage = document.getElementById("highestPage");
+        
+        highestPage.innerHTML = ceil;
+        if(recordHigh > recordLimit - 1) {
+          recordHigh = recordLimit - 1;
+        }
+        for(var a = recordLow; a <= recordHigh; a++) {
+          currentPageData.push(this.state.orders[a]);
+        }
+    //    this.pageMaxMin();
+    //    this.handleApproachPageLimit();
+        this.setState({
+          currentPage: currentPageData
+        },  this.handleEnds())
+      }
+    
+      resultsPerPage = (e) => {
+        let rppc = document.getElementById("numberPerPage").childNodes;
+        for(var i = 0; i < rppc.length; i++) {
+          rppc[i].className="paginate";
+        }
+        e.target.className = "paginate paginateActive";
+    
+        let pni = document.getElementById("pageNumberIncrement").childNodes;
+        pni[0].innerHTML = -1;
+        pni[1].innerHTML = 0;
+        pni[2].innerHTML = 1;
+        pni[3].innerHTML = 2;
+        pni[4].innerHTML = 3;
+    
+        this.setState({
+          resultsPerPage: e.target.innerHTML,
+          pageNumber: 1
+        },function(){
+          this.setDataPerPage();
+        })
+      }
+    
+      // PAGINATION
+      // PAGINATION
+      // PAGINATION
+      // PAGINATION
+    
+    // FORWARD ARROW
+    pageForward = () => {
+      let pni = document.getElementById("pageNumberIncrement").childNodes;
+    
+      for(var b = 0; b < pni.length; b++){
+        pni[b].innerHTML = parseInt(pni[b].innerHTML) + 1;
+      }
+    
+      this.setState({
+        pageNumber: this.state.pageNumber + 1
+      },this.getData())
+    }
+    
+    // BACK ARROW
+    pageBackward = () => {
+      let pni = document.getElementById("pageNumberIncrement").childNodes;
+    
+      for(var b = 0; b < pni.length; b++){
+        pni[b].innerHTML = parseInt(pni[b].innerHTML) - 1;
+      }
+    
+      this.setState({
+        pageNumber: this.state.pageNumber - 1
+      },this.getData())
+    }
+    
+    // CLICK NUMBER
+    pageNumber = (e) => {
+      let sense = parseInt(e.target.innerHTML);
+      let pni = document.getElementById("pageNumberIncrement").childNodes;
+      pni[0].innerHTML = sense - 2;
+      pni[1].innerHTML = sense - 1;
+      pni[2].innerHTML = sense;
+      pni[3].innerHTML = sense + 1;
+      pni[4].innerHTML = sense + 2;
+    
+      this.setState({
+        pageNumber: sense
+      },this.getData())
+    
+    }
+    
+    // HANDLE HIDE/SHOW OF ENDCAPS
+    handleEnds = () => {
+      let currentPage = this.state.pageNumber;
+      let backArrow = document.getElementById("paginateBackArrow");
+      let forwardArrow = document.getElementById("paginateForwardArrow");
+      let dots = document.getElementById("dotdotdot");
+      let dotsLow = document.getElementById("dotdotdotLow");
+      let pageMax = document.getElementById("highestPage");
+      let pageMin = document.getElementById("lowestPage");
+      let pni = document.getElementById("pageNumberIncrement").childNodes;
+    
+      if(currentPage === 1){
+        backArrow.className = "paginateArrow hidden";
+        pni[1].className = "paginate hidden";
+        pni[4].className = "paginate";
+      } else {
+        backArrow.className = "paginateArrow";
+        pni[1].className = "paginate";
+        pni[4].className = "paginate hidden";
+      }
+    
+      if(currentPage - 1 <= parseInt(pageMin.innerHTML)) {
+        pageMin.className = "paginate hidden";
+        dotsLow.className = "paginatedotdotdot hidden";
+      } else {
+        pageMin.className = "paginate";
+        dotsLow.className = "paginatedotdotdot";
+      }
+    
+      if(currentPage === parseInt(pageMax.innerHTML)) {
+        forwardArrow.className = "paginateArrow hidden";
+        pni[3].className = "paginate hidden";
+        pni[0].className = "paginate";
+      } else {
+        forwardArrow.className = "paginateArrow";
+        pni[3].className = "paginate";
+        pni[0].className = "paginate hidden";
+      }
+    
+      if(currentPage + 1 >= parseInt(pageMax.innerHTML)) {
+        pageMax.className = "paginate hidden";
+        dots.className = "paginatedotdotdot hidden";
+      } else {
+        pageMax.className = "paginate";
+        dots.className = "paginatedotdotdot";
+      }
+    
+      if(currentPage === parseInt(pageMin.innerHTML) && currentPage === parseInt(pageMax.innerHTML)) {
+        pni[0].className = "paginate hidden";
+        pni[4].className = "paginate hidden";
+      }
+    
+      if(parseInt(pageMax.innerHTML) === 2 && currentPage === 1) {
+        pni[4].className = "paginate hidden";
+      }
+    
+      if(parseInt(pageMax.innerHTML) === 2 && currentPage === 2) {
+        pni[0].className = "paginate hidden";
+      }
+    
+    }
     
     render() {
         
@@ -181,7 +338,7 @@ class NewOrder extends React.Component {
             <th>Notes</th>
             <th>Action</th>
             </tr>
-            {this.state.orders.map(
+            {this.state.currentPage.map(
                 p => (
                     <tr key={p.orderid}>
                     <td>{p.orderid}</td>
@@ -217,6 +374,57 @@ class NewOrder extends React.Component {
                     </tbody>
                     </table>
                     </div>
+
+
+                    <div className="paginationContainer">
+        
+        <div className="numberPerPageContainer">
+        <label>Results Per Page</label>
+
+        <div id="numberPerPage" className="numberPerPage">
+
+        <div onClick={this.resultsPerPage} className="paginate paginateActive">3</div>
+        <div onClick={this.resultsPerPage} className="paginate">10</div>
+        <div onClick={this.resultsPerPage} className="paginate">25</div>
+        <div onClick={this.resultsPerPage} className="paginate">50</div>
+        <div onClick={this.resultsPerPage} className="paginate">100</div>
+
+        </div>
+
+        </div>
+        
+        <div className="pageNumberContainer">
+        <label>Page Number</label>
+
+        <div id="pageNumber" className="pageNumber">
+
+        <div onClick={this.pageBackward} id="paginateBackArrow" className="paginateArrow">&larr;</div>
+        <div onClick={this.pageNumber} id="lowestPage" className="paginate">1</div>
+        <div id="dotdotdotLow" className="paginatedotdotdot">...</div>
+
+        <div className="pageNumberIncrement" id="pageNumberIncrement">
+        <div onClick={this.pageNumber} className="paginate hidden">-1</div>
+        <div onClick={this.pageNumber} className="paginate">0</div>
+        <div onClick={this.pageNumber} className="paginate paginateActive">1</div>
+        <div onClick={this.pageNumber} className="paginate">2</div>
+        <div onClick={this.pageNumber} className="paginate hidden">3</div>
+        </div>
+
+        <div id="dotdotdot" className="paginatedotdotdot">...</div>
+        <div onClick={this.pageNumber} id="highestPage" className="paginate">4</div>
+        <div onClick={this.pageForward} id="paginateForwardArrow" className="paginateArrow">&rarr;</div>
+
+        </div>
+        </div>
+        </div>
+        
+        <div id="helperGrid" className="helperGrid">
+        {this.state.orders.map(p => (
+          <p key={p.orderid}>{p.orderid}</p>
+        ))}
+        </div>
+
+
                     </div>
                     );
                 }

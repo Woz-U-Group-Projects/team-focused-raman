@@ -83,6 +83,11 @@
     margin-top: 50px;
   }
   
+  tr {
+    max-height: 30px;
+    height: 30px;
+  }
+
   .orders {
     table-layout: auto;
     margin: 0 25px;
@@ -93,8 +98,14 @@
   .orders td {
     border: 2px solid lightgray;
     padding: 5px 10px;
+    overflow: hidden;
+    white-space: nowrap;
   }
   
+  td, th {
+    white-space: nowrap;
+  }
+
   .ordersGrid {
     display: block;
   }
@@ -689,5 +700,107 @@ select + label {
     top: 100px;
     z-index: 1 !important;
   }
-
 }
+
+.paginationContainer {
+  display: block;
+  margin-bottom: 65px;
+}
+
+.paginationContainer label {
+  color: #3E3E3E;
+}
+
+.numberPerPageContainer {
+  float: left;
+}
+
+.pageNumberContainer {
+  float: right;
+  text-align: right;
+}
+
+.paginate {
+  display: inline-block;
+  padding: 5px 8px;
+  font-size: 13px;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+   -khtml-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.paginate:hover {
+  color: #368BD7 !important;
+  transition: 0.2s ease-in-out;
+  text-decoration: underline;
+}
+
+.paginateActive:hover {
+  color: #000000 !important;
+  transition: 0.2s ease-in-out;
+  text-decoration: none;
+}
+
+#paginateBackArrow {
+  margin-right: -5px;
+}
+
+#paginateForwardArrow {
+  margin-left: -5px;
+}
+
+#paginateBackArrow,
+#paginateForwardArrow {
+  display: inline-block;
+  padding: 4px 6px;
+  margin-top: 3px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #3B3B3B;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+   -khtml-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+#paginateBackArrow:hover,
+#paginateForwardArrow:hover {
+  color: #368BD7 !important;
+  transition: 0.5s ease-in-out;
+  background-color: #DBDBDB;
+  border-radius: 50%;
+  text-decoration: none;
+}
+
+.paginateActive {
+  background-color: #DBDBDB;
+  border-radius: 10px;
+  transition: 0.2s ease-in-out;
+}
+
+.paginatedotdotdot {
+  display: inline-block;
+  margin: 0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+   -khtml-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  letter-spacing: -1px;
+}
+
+.pageNumberIncrement {
+  display: inline-block;
+}
+
+.helperGrid {
+  display: none;
+}
+

@@ -40,14 +40,6 @@ class NewOrder extends React.Component {
         this.getSearchData();
     }
     
-    showNoData = () => {
-        if(this.state.orders.length >= 1) {
-            this.setState({dataAvailable: "dataIsAvailable"})
-        } else {
-            this.setState({dataAvailable: "noData"})
-        }
-    }
-    
     getInitialState(){
         return {searchResults:"hidden"};
     };
@@ -90,114 +82,77 @@ class NewOrder extends React.Component {
     }
 
     checkKey = (e) => {
-            
-            
         $('input').bind('keydown', function(e){
             if(e.keyCode === 38 || e.keyCode === 40){
                 e.preventDefault();
             }
         });
-        
         var limitHigh = document.getElementById("searchResults").childElementCount;
         var limitLow = 0;
         var myCount = this.state.downCount;
-        
         if(myCount < limitLow) {
             myCount = -1;
         } 
-        
         if(myCount >= limitHigh) {
             myCount = limitHigh;
         } 
         // 65-90 are a-z ;; space is 32 ;; 48-57 are numbers ;;  189 is hypen
-        
-        // for(var i = 0; i < document.getElementById("searchResults").childNodes.length; i++) {
-        //     document.getElementById("searchResults").childNodes[i].className = "customerSearchResult";           
-        // }
-        
         if(myCount <= limitHigh - 1 && myCount >= limitLow && limitHigh > 0) {
             document.getElementById("searchResults").childNodes[myCount].className = "customerSearchResultActive";           
-        }  
-        
+        }
         if (e.keyCode === 40) {
             // down arrow
             myCount = myCount + 1;
-            
             if(myCount <= limitLow) {
                 myCount = 0;
             } 
-            
             if(myCount >= limitHigh - 1) {
                 myCount = limitHigh - 1;
             } 
-            
             if(myCount > limitLow) {
                 document.getElementById("searchResults").childNodes[myCount - 1].className = "customerSearchResult";           
             }
             if(myCount < limitHigh - 1) {
                 document.getElementById("searchResults").childNodes[myCount + 1].className = "customerSearchResult";           
             }
-            
             if(myCount <= limitHigh && myCount >= limitLow && limitHigh > 0) {
                 document.getElementById("searchResults").childNodes[myCount].className = "customerSearchResultActive";           
             }       
-            
             this.setState({
                 downCount: myCount
             })
-            
-        }
-        
-        else if (e.keyCode === 38) {
+        } else if (e.keyCode === 38) {
             // up arrow
             myCount = myCount - 1;
-            
             if(myCount <= limitLow) {
                 myCount = 0;
             } 
-            
             if(myCount >= limitHigh) {
                 myCount = limitHigh;
             } 
-            
             if(myCount !== limitLow) {
                 document.getElementById("searchResults").childNodes[myCount - 1].className = "customerSearchResult";           
             }
-            
             if(myCount < limitHigh - 1) {
                 document.getElementById("searchResults").childNodes[myCount + 1].className = "customerSearchResult";           
             }
-            
             if(myCount <= limitHigh && myCount >= limitLow && limitHigh > 0) {
                 document.getElementById("searchResults").childNodes[myCount].className = "customerSearchResultActive";           
             }
-            
             this.setState({
                 downCount: myCount
             })       
-        }
-        
-        else if (e.keyCode === 13) {
+        } else if (e.keyCode === 13) {
             // enter
-
             if(myCount < limitLow) {
                 myCount = 0;
             } 
-            
             if(myCount >= limitHigh) {
                 myCount = limitHigh - 1;
             } 
-
             document.getElementById("searchResults").childNodes[myCount].click();           
         }
     }
-    
-    //    getData = () => {
-    //        let url = "http://localhost:8080/orderdetail";
-    //        axios.get(url).then(response => this.setState({ orders: response.data },function() {
-    //            this.showNoData();
-    //        }));
-    //    };
     
     getSearchData = () => {
         let url = "http://localhost:8080/customersearch";
@@ -210,19 +165,7 @@ class NewOrder extends React.Component {
         this.validateCustomer();
         this.hideResults();
     };
-    
-    //    deleteOrder = (someOrder) => {
-    //        // eslint-disable-next-line
-    //        let url = "http://localhost:8080/order/" + `${someOrder}`
-    //        axios.delete(url)
-    //        //    .catch(function (error) {
-    //        //      console.log("Deletion failed with error: " + error);
-    //        //    })
-    //        .then(response => {
-    //            this.getData();
-    //        })
-    //    }
-    
+
     addOrder = () => {
         let url = "http://localhost:8080/order";
         axios.post(url, { 
@@ -244,24 +187,17 @@ class NewOrder extends React.Component {
         this.validateCustomer();
         this.validateServiceDate();
         this.validateService();
-        
         let customerid = document.getElementById("customerid");
         let serviceDate = document.getElementById("serviceDate");
         let service = document.getElementById("service");
-        
         if(
             customerid.value === "" ||
             serviceDate.value === "" ||
             service.value === ""
-            ) {
-                // DO NOTHING
-            } else {
-                console.log(this.serviceDate.current.value);
+            ) {} else {
                 this.addOrder();
-            }
-            
+            }            
         }
-        
         
         validateCustomer = () => {
             let customerid = document.getElementById("customerid");
@@ -301,7 +237,6 @@ class NewOrder extends React.Component {
         }
         
         render() {
-            
             return (
                 <div ref={this.newOrder} className="customer">
                 <h3>New Order</h3>

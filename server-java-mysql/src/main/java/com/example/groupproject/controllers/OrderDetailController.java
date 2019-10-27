@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+// import org.springframework.stereotype.Controller;
 // import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.groupproject.models.CustomerRepository;
-import com.example.groupproject.models.Order;
+//import com.example.groupproject.models.CustomerRepository;
+//import com.example.groupproject.models.Order;
 //import com.example.groupproject.models.Customer;
 //import com.example.groupproject.models.Order;
 import com.example.groupproject.models.OrderDetail;
@@ -51,76 +51,33 @@ public class OrderDetailController {
         			"orders.customerid, \n" + 
         			"CONCAT(customer.first_name, \" \", customer.last_name) as customerName, \n" + 
         			"orders.service_date, \n" + 
-        			"orders.service, \n" + 
-        			"CASE\n" + 
-        			"	WHEN\n" + 
-        			"		orders.cu='0'\n" + 
-        			"	THEN\n" + 
-        			"        \"-\"\n" + 
-        			"	ELSE\n" + 
-        			"		orders.cu\n" + 
-        			"	END AS cu,\n" + 
-        			"        \n" + 
-        			"CASE\n" + 
-        			"	WHEN\n" + 
-        			"		orders.pw='0'\n" + 
-        			"	THEN\n" + 
-        			"        \"-\"\n" + 
-        			"	ELSE\n" + 
-        			"		orders.pw\n" + 
-        			"	END AS pw,\n" + 
-        			"CASE\n" + 
-        			"	WHEN\n" + 
-        			"		orders.r='0'\n" + 
-        			"	THEN\n" + 
-        			"        \"-\"\n" + 
-        			"	ELSE\n" + 
-        			"		orders.r\n" + 
-        			"	END AS r,\n" + 
-        			"CASE\n" + 
-        			"	WHEN\n" + 
-        			"		orders.lr='0'\n" + 
-        			"	THEN\n" + 
-        			"        \"-\"\n" + 
-        			"	ELSE\n" + 
-        			"		orders.lr\n" + 
-        			"	END AS lr,\n" + 
-        			"CASE\n" + 
-        			"	WHEN\n" + 
-        			"		orders.misc='0'\n" + 
-        			"	THEN\n" + 
-        			"        \"-\"\n" + 
-        			"	ELSE\n" + 
-        			"		orders.misc\n" + 
-        			"	END AS misc,\n" + 
+        			"orders.service,\n" + 
+        			"orders.cu,\n" + 
+        			"orders.pw,\n" + 
+        			"orders.r,\n" + 
+        			"orders.lr,\n" + 
+        			"orders.misc,\n" + 
         			"(SELECT   \n" + 
         			"	CASE\n" + 
         			"    WHEN\n" + 
         			"      orders.service= 'MT'\n" + 
         			"        THEN\n" + 
-        			"          CONCAT('$', cast(customer.mtrate as DECIMAL(10,2)))\n" + 
+        			"          cast(customer.mtrate as DECIMAL(10,2))\n" + 
         			"    WHEN\n" + 
         			"      orders.service= 'MTF'\n" + 
         			"        THEN\n" + 
-        			"          CONCAT('$', cast(customer.mtfrate as DECIMAL(10,2)))\n" + 
+        			"          cast(customer.mtfrate as DECIMAL(10,2))\n" + 
         			"    WHEN\n" + 
         			"      orders.service= 'MTB'\n" + 
         			"        THEN\n" + 
-        			"          CONCAT('$', cast(customer.mtbrate as DECIMAL(10,2)))\n" + 
+        			"          cast(customer.mtbrate as DECIMAL(10,2))\n" + 
         			"  END) AS mow_total,\n" + 
         			"\n" + 
         			"(SELECT \n" + 
-        			"	CASE\n" + 
-        			"	WHEN\n" + 
-        			"		((orders.cu + orders.pw + orders.r + orders.lr + orders.misc) * 0.80) = '0'\n" + 
-        			"	THEN\n" + 
-        			"		\"-\"\n" + 
-        			"	ELSE\n" + 
-        			"		CONCAT('$', cast(((orders.cu + orders.pw + orders.r + orders.lr + orders.misc) * 0.80) as DECIMAL(10,2)))\n" + 
+        			"	cast(((orders.cu + orders.pw + orders.r + orders.lr + orders.misc) * 0.80) as DECIMAL(10,2))\n" + 
         			"	END) AS extras_total, \n" + 
         			"\n" + 
         			"(SELECT   \n" + 
-        			"	CONCAT('$', \n" + 
         			"        (CASE\n" + 
         			"    WHEN\n" + 
         			"      orders.service= 'MT'\n" + 
@@ -134,7 +91,7 @@ public class OrderDetailController {
         			"      orders.service= 'MTB'\n" + 
         			"        THEN\n" + 
         			"          cast(customer.mtbrate as DECIMAL(10,2))\n" + 
-        			"  END) + cast(((orders.cu + orders.pw + orders.r + orders.lr + orders.misc) * 0.80) as DECIMAL(10,2)))) as total,\n" + 
+        			"  END) + cast(((orders.cu + orders.pw + orders.r + orders.lr + orders.misc) * 0.80) as DECIMAL(10,2))) as total,\n" + 
         			"\n" + 
         			"orders.notes\n" + 
         			"\n" + 

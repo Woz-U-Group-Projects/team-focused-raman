@@ -5,13 +5,11 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-// import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-// import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,10 +29,6 @@ public class CustomerController {
     return customerRepository.findAll();
   }
   
- //  Optional<RoomEntity> optinalEntity =  roomRepository.findById(roomId);
- // RoomEntity roomEntity = optionalEntity.get();
-  
-
   @GetMapping("/{customerid}")
   public Optional<Customer> getCustomer(@PathVariable Long customerid) {
     return customerRepository.findById(customerid);
@@ -56,6 +50,7 @@ public class CustomerController {
   public Customer updateProject(@PathVariable Long customerid, @RequestBody Customer customer) {
     Customer foundCustomer = customerRepository.findById(customerid).orElse(null);
     if (foundCustomer != null) {
+    	
     	foundCustomer.setFirstName(customer.getFirstName());
     	foundCustomer.setLastName(customer.getLastName());
     	foundCustomer.setPhone(customer.getPhone());
@@ -74,6 +69,7 @@ public class CustomerController {
     	foundCustomer.setPaymentType(customer.getPaymentType());
     	foundCustomer.setBasis(customer.getBasis());
     	foundCustomer.setDay(customer.getDay());
+    	
       customerRepository.save(foundCustomer);
       return foundCustomer;
     }

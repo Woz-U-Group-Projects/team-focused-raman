@@ -1,53 +1,60 @@
 import React from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import edit from "../img/edit.png";
-import editHover from "../img/editHover.png";
-import deleteIcon from "../img/delete.png";
-import deleteHover from "../img/deleteHover.png";
+import { withRouter } from "react-router-dom";
 
-class NewOrder extends React.Component {
+class TotalsPerCustomer extends React.Component {  
     constructor(props) {
         super(props);
         this.state = { 
-            orders: [],
+            reportData: [],
+            reportTotals: [],
             currentPage: [],
-            query: [],
-            searchResults: "hidden",
             dataAvailable: "noData",
+            pageTitle: "New Customer",
             editURL: "",
-            resultsPerPage: 10,
+            resultsPerPage: 50,
             pageNumber: 1
         };
-        this.newOrder = React.createRef();
-        this.orderid = React.createRef();
-        this.customerid = React.createRef();
-        this.serviceDate = React.createRef();
-        this.service = React.createRef();
-        this.cu = React.createRef();
-        this.pw = React.createRef();
-        this.r = React.createRef();
-        this.lr = React.createRef();
-        this.misc = React.createRef();
-        this.notes = React.createRef();
+        this.firstName = React.createRef();
+        this.lastName = React.createRef();
+        this.email = React.createRef();
+        this.phone = React.createRef();
+        this.mtrate = React.createRef();
+        this.mtfrate = React.createRef();
+        this.mtbrate = React.createRef();
+        this.paymentType = React.createRef();
+        this.basis = React.createRef();
+        this.day = React.createRef();
+        this.phoneField = React.createRef();
         
-        // search
-        this.returnedQuery = React.createRef();       
-        this.searchResults = React.createRef();       
-        this.searchResult = React.createRef();       
-        this.searchInput = React.createRef();
-        
-        // bound functions
-        this.enter = this.enter.bind(this);
-        this.selectContents = this.selectContents.bind(this);
+        this.deleteCustomer = this.deleteCustomer.bind(this);
+        this.resultsPerPage = this.resultsPerPage.bind(this);
+        this.setDataPerPage = this.setDataPerPage.bind(this);
+        // this.pageNumber = this.pageNumber.bind(this);
+        // this.pageMaxMin = this.pageMaxMin.bind(this);
+        // this.handleApproachPageLimit = this.handleApproachPageLimit.bind(this);
+        // this.pageForward = this.pageForward.bind(this);
+        // this.pageBackward = this.pageBackward.bind(this);
     }
     
     componentWillMount() {
-        this.getData();
-        this.getSearchData();
+        this.forceUpdate();
         this.showSpinner();
+        this.getData();
     }
-
+    
+    componentDidMount() {
+        this.forceUpdate();
+    }
+    
+    componentWillUnmount() {
+        this.setState({
+            reportData: []
+        },function(){
+            this.getData();
+        });
+    }
+    
     authenticate(){
         return new Promise(resolve => setTimeout(resolve, 0)) // 2 seconds
     }
@@ -64,8 +71,85 @@ class NewOrder extends React.Component {
                 // fade out
                 ele.classList.add('available')
             }
+            setTimeout(() => {
+                this.gridFormat();
+            }, 50);
         })
     }
+    
+    showNoData = () => {
+        if(this.state.reportData.length >= 1) {
+            this.setState({dataAvailable: "dataIsAvailable"})
+        } else {
+            this.setState({dataAvailable: "noData"})
+        }
+    }
+    
+    deleteCustomer = (someone) => {
+        // eslint-disable-next-line
+        let url = "http://localhost:8080/customer/" + `${someone}`
+        axios.delete(url)
+        .then(response => {
+            this.getData();
+        })
+    }
+    
+    editCustomer = (someone) => {
+        // eslint-disable-next-line
+        let url = "/editcustomer/" + `${someone}`;
+        this.setState({
+            editURL: url
+        })
+    }
+    
+    addCustomer = () => {
+        let url = "http://localhost:8080/customer";
+        axios.post(url, { 
+            firstName: this.firstName.current.value,
+            lastName: this.lastName.current.value,
+            email: this.email.current.value,
+            phone: this.phone.current.value,
+            mtrate: this.mtrate.current.value,
+            mtfrate: this.mtfrate.current.value,
+            mtbrate: this.mtbrate.current.value,
+            paymentType: this.paymentType.current.value,
+            basis: this.basis.current.value,
+            day: this.day.current.value,
+        }).then(response => {
+            // refresh the data
+            this.getData();
+            // empty the input
+            this.firstName.current.value = "";
+            this.lastName.current.value = "";
+            this.email.current.value = "";
+            this.phone.current.value = "";
+            this.mtrate.current.value = "";
+            this.mtfrate.current.value = "";
+            this.mtbrate.current.value = "";
+            this.paymentType.current.value = "";
+            this.basis.current.value = "";
+            this.day.current.value = "";
+        });
+    };
+    
+    getData = () => {
+        let url = "http://localhost:8080/reports/totalspercustomer";
+        axios.get(url).then(response => this.setState({ reportData: response.data }, function() {
+            this.getTotals();
+            this.showNoData();
+            this.setDataPerPage();
+            setTimeout(() => {
+                this.gridFormat();
+            }, 0);;
+            this.hideSpinner();
+        }));
+    };
+    
+    getTotals = () => {
+        let url = "http://localhost:8080/reports/totals";
+        axios.get(url).then(response => this.setState({ reportTotals: response.data }, function() {
+        }));
+    };
     
     formatNumber = (n) => {
         // format number 1000000 to 1,234,567
@@ -73,9 +157,9 @@ class NewOrder extends React.Component {
     }
     
     
-    formatCurrency = (something, blur) => {
+    formatCurrency = (something) => {
         var input_val = something.innerHTML;
-        if (input_val === "") { return; }
+        if (input_val === 0) { return; }
         if (input_val.indexOf(".") >= 0) {
             var decimal_pos = input_val.indexOf(".");
             var left_side = input_val.substring(0, decimal_pos);
@@ -115,117 +199,6 @@ class NewOrder extends React.Component {
         }
     }
     
-    showNoData = () => {
-        if(this.state.orders.length >= 1) {
-            this.setState({dataAvailable: "dataIsAvailable"})
-        } else {
-            this.setState({dataAvailable: "noData"})
-        }
-    }
-    
-    getInitialState(){
-        return {searchResults:"hidden"};
-    };
-    
-    hideResults = () => {
-        this.setState({"searchResults":"hidden"});
-    }
-    
-    showResults = () => {
-        this.setState({"searchResults":"show"});
-    }
-    
-    selectContents = (e) => {
-        e.target.select();
-    }
-    
-    searchThis = () => {
-        if(this.searchInput.current.value === '') {
-            this.hideResults();
-            this.customerid.current.value = '';
-        } else {
-            this.showResults();
-            let url = "http://localhost:8080/customersearchinput";
-            axios.post(url, { 
-                search: this.searchInput.current.value,            
-            }).then(response => {
-                this.getSearchData();
-            });
-            this.customerid.current.value = '';
-        }
-    };
-    
-    getData = () => {
-        let url = "http://localhost:8080/orderdetail";
-        axios.get(url).then(response => this.setState({ orders: response.data },function() {
-            this.showNoData();
-            this.setDataPerPage();
-            this.hideSpinner();
-        }));
-    };
-    
-    getSearchData = () => {
-        let url = "http://localhost:8080/customersearch";
-        axios.get(url).then(response => this.setState({ query: response.data }));
-    };
-    
-    enter = (e) => {
-        this.searchInput.current.value = e.target.innerHTML;
-        this.customerid.current.value = e.target.id;
-        this.hideResults();
-    };
-    
-    deleteOrder = (someOrder) => {
-        // eslint-disable-next-line
-        let url = "http://localhost:8080/order/" + `${someOrder}`
-        axios.delete(url)
-        //    .catch(function (error) {
-        //      console.log("Deletion failed with error: " + error);
-        //    })
-        .then(response => {
-            this.getData();
-        })
-    }
-    
-    editOrder = (someOrder) => {
-        // eslint-disable-next-line
-        let url = "/editorder/" + `${someOrder}`;
-        this.setState({
-            editURL: url
-        })
-    }
-    
-    addOrder = () => {
-        let url = "http://localhost:8080/order";
-        axios.post(url, { 
-            customerid: this.customerid.current.value,
-            serviceDate: this.serviceDate.current.value,
-            service: this.service.current.value,
-            cu: this.cu.current.value,
-            pw: this.pw.current.value,
-            r: this.r.current.value,
-            lr: this.lr.current.value,
-            misc: this.misc.current.value,
-            notes: this.notes.current.value,     
-        }).then(response => {
-            // refresh the data
-            this.getData();
-            
-            // empty the input            
-            this.customerid.current.value = "";
-            this.searchInput.current.value = "";
-            this.serviceDate.current.value = "";
-            this.service.current.value = "";
-            this.cu.current.value = "";
-            this.pw.current.value = "";
-            this.r.current.value = "";
-            this.lr.current.value = "";
-            this.misc.current.value = "";
-            this.notes.current.value = "";
-            
-        });
-    };
-    
     setDataPerPage = () => {
         let recordLow = this.state.pageNumber * this.state.resultsPerPage - this.state.resultsPerPage;
         let recordHigh = this.state.pageNumber * this.state.resultsPerPage - 1;
@@ -239,16 +212,13 @@ class NewOrder extends React.Component {
             recordHigh = recordLimit - 1;
         }
         for(var a = recordLow; a <= recordHigh; a++) {
-            currentPageData.push(this.state.orders[a]);
+            currentPageData.push(this.state.reportData[a]);
         }
         //    this.pageMaxMin();
         //    this.handleApproachPageLimit();
         this.setState({
             currentPage: currentPageData
         },  this.handleEnds())
-        setTimeout(() => {
-            this.gridFormat();
-        }, 0);
     }
     
     resultsPerPage = (e) => {
@@ -382,70 +352,58 @@ class NewOrder extends React.Component {
         
     }
     
+    // HANDLE WHEN ONLY 1-2 PAGES
+    
+    
+    // RENDER
+    // RENDER
+    // RENDER
+    // RENDER
+    
     render() {
         
         return (
-            <div ref={this.newOrder} className="customer">           
-            <h3>Orders</h3>
+            <div className="customer"> 
+            <h3>Totals By Customer</h3>
             <div className="grid">
-            <table>
-            <tbody>
+            <table className="gridTable">
+            <tbody id="customerGrid">
             <tr>
-            <th>Order ID</th>
             <th>Customer ID</th>
             <th>Customer Name</th>
-            <th>Service Date</th>
-            <th>Service Rendered</th>
-            <th>Clean Up</th>
-            <th>Pull Weeds</th>
-            <th>Rake</th>
-            <th>Leaf Removal</th>
-            <th>Misc. Labor</th>
-            <th>Mow Total ($)</th>
-            <th>Extras Total ($)</th>
-            <th>Order Total ($)</th>
-            <th>Notes</th>
-            <th>Action</th>
+            <th>Cash ($)</th>
+            <th>Credit ($)</th>
+            <th>Total ($)</th>
             </tr>
-            {this.state.currentPage.map(
-                p => (
-                    <tr key={p.orderid}>
-                    <td>{p.orderid}</td>
-                    <td>{p.customerid}</td>
-                    <td>{p.customerName}</td>
-                    <td className="dateField">{p.service_date}</td>
-                    <td>{p.service}</td>
-                    <td>{p.cu}</td>
-                    <td>{p.pw}</td>
-                    <td>{p.r}</td>
-                    <td>{p.lr}</td>
-                    <td>{p.misc}</td>
-                    <td className="currencyField">{p.mow_total}</td>
-                    <td className="currencyField">{p.extras_total}</td>
+            {this.state.reportData.map(p => (
+                <tr key={p.customerid}>
+                <td className="idField">{p.customerid}</td>
+                <td className="stringField">{p.customerName}</td>
+                <td className="currencyField">{p.cash}</td>
+                <td className="currencyField">{p.credit}</td>
+                <td className="currencyField">{p.total}</td>
+                </tr>
+                ))}
+                {this.state.reportTotals.map(p => (
+                    
+                    <tr className="totalsRow" key="totalsRow">
+                    
+                    <td colSpan="2" className="subheadField">Totals:</td>
+                    <td className="currencyField">{p.cash}</td>
+                    <td className="currencyField">{p.credit}</td>
                     <td className="currencyField">{p.total}</td>
-                    <td>{p.notes}</td>
-                    <td>
-                    <div className="gridAction">
-                    <span title="Edit Customer"><img alt="edit" className="visible actionEdit" src={edit} /></span>
                     
-                    
-                    <Link to={this.state.editURL}><span onMouseOver={() => this.editOrder(p.orderid)}title="Edit Order"><img alt="edit" className="hiddenIcon actionEdit" src={editHover} /></span></Link>
-                    
-                    <span title="Delete Order"><img alt="delete" className="visible actionDelete" src={deleteIcon} /></span>
-                    <span onClick={() => this.deleteOrder(p.orderid)} title="Delete Customer"><img alt="delete" className="hiddenIcon actionDelete" src={deleteHover} /></span>
-                    </div>
-                    </td>
                     </tr>
+                    
                     ))}
                     <tr className={this.state.dataAvailable}>
-                    <td colSpan="15">No Data Available.</td>
+                    <td colSpan="5">No Data Available.</td>
                     </tr>
                     </tbody>
                     </table>
                     </div>
                     
-                    
-                    <div className="paginationContainer">
+                    <div className="paginationContainer hidden">
                     
                     <div className="numberPerPageContainer">
                     <label>Results Per Page</label>
@@ -453,9 +411,9 @@ class NewOrder extends React.Component {
                     <div id="numberPerPage" className="numberPerPage">
                     
                     <div onClick={this.resultsPerPage} className="paginate">3</div>
-                    <div onClick={this.resultsPerPage} className="paginate paginateActive">10</div>
+                    <div onClick={this.resultsPerPage} className="paginate">10</div>
                     <div onClick={this.resultsPerPage} className="paginate">25</div>
-                    <div onClick={this.resultsPerPage} className="paginate">50</div>
+                    <div onClick={this.resultsPerPage} className="paginate paginateActive">50</div>
                     
                     </div>
                     
@@ -487,16 +445,15 @@ class NewOrder extends React.Component {
                     </div>
                     
                     <div id="helperGrid" className="helperGrid">
-                    {this.state.orders.map(p => (
-                        <p key={p.orderid}>{p.orderid}</p>
+                    {this.state.reportData.map(p => (
+                        <p key={p.customerid}>{p.customerid}</p>
                         ))}
                         </div>
-                        
                         
                         </div>
                         );
                     }
                 }
                 
-                export default NewOrder;
+                export default withRouter(TotalsPerCustomer);
                 

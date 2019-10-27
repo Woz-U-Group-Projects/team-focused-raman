@@ -166,8 +166,8 @@ class Navbar extends React.Component {
       <i className="fa fa-caret-down"></i>
       </button>
       <div className="dropdown-content">
-      <Link onClick={this.closeDropdown} to="/orders">Totals by Date</Link>
-      <Link onClick={this.closeDropdown} to="/neworder">Totals by Customer</Link>
+      <Link onClick={this.closeDropdown} to="/reports/totalsbydate">Totals by Date</Link>
+      <Link onClick={this.closeDropdown} to="/reports/totalsbycustomer">Totals by Customer</Link>
       </div>
       </div> 
 

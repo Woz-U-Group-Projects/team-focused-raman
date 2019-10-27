@@ -28,40 +28,7 @@ class NewCustomer extends React.Component {
     this.zip = React.createRef();
     this.country = React.createRef();
     
-    this.deleteCustomer = this.deleteCustomer.bind(this);
     this.validateForm = this.validateForm.bind(this);
-  }
-  
-  componentWillMount() {
-    this.getData();
-  }
-  
-  //  componentDidMount() {
-  //    this.firstName.focus();
-  //  }
-  
-  showNoData = () => {
-    if(this.state.customers.length >= 1) {
-      this.setState({dataAvailable: "dataIsAvailable"})
-    } else {
-      this.setState({dataAvailable: "noData"})
-    }
-  }
-  
-  getData = () => {
-    let url = "http://localhost:8080/customer";
-    axios.get(url).then(response => this.setState({ customers: response.data }, function() {
-      this.showNoData();
-    }));
-  };
-  
-  deleteCustomer = (someone) => {
-    // eslint-disable-next-line
-    let url = "http://localhost:8080/customer/" + `${someone}`
-    axios.delete(url)
-    .then(response => {
-      this.getData();
-    })
   }
   
   addCustomer = () => {

@@ -15,7 +15,7 @@ class CustomerGrid extends React.Component {
       dataAvailable: "noData",
       pageTitle: "New Customer",
       editURL: "",
-      resultsPerPage: 3,
+      resultsPerPage: 10,
       pageNumber: 1
     };
     this.firstName = React.createRef();
@@ -33,22 +33,37 @@ class CustomerGrid extends React.Component {
     this.deleteCustomer = this.deleteCustomer.bind(this);
     this.resultsPerPage = this.resultsPerPage.bind(this);
     this.setDataPerPage = this.setDataPerPage.bind(this);
-    // this.pageNumber = this.pageNumber.bind(this);
-    // this.pageMaxMin = this.pageMaxMin.bind(this);
-    // this.handleApproachPageLimit = this.handleApproachPageLimit.bind(this);
-    // this.pageForward = this.pageForward.bind(this);
-    // this.pageBackward = this.pageBackward.bind(this);
   }
   
   componentWillMount() {
     this.forceUpdate();
     this.getData();
+    this.showSpinner();
   }
   
   componentDidMount() {
     this.forceUpdate();
   }
   
+  authenticate(){
+    return new Promise(resolve => setTimeout(resolve, 0)) // 2 seconds
+}
+
+showSpinner = () => {
+    const ele = document.getElementById("spinner");
+    ele.className = "spinnerContainer";
+}
+
+hideSpinner = () => {
+    this.authenticate().then(() => {
+        const ele = document.getElementById("spinner");
+        if(ele){
+            // fade out
+            ele.classList.add('available')
+        }
+    })
+}
+
   componentWillUnmount() {
     this.setState({
       customers: []
@@ -117,6 +132,7 @@ class CustomerGrid extends React.Component {
     axios.get(url).then(response => this.setState({ customers: response.data }, function() {
       this.showNoData();
       this.setDataPerPage();
+      this.hideSpinner();
     }));
   };
 
@@ -338,8 +354,8 @@ handleEnds = () => {
 
         <div id="numberPerPage" className="numberPerPage">
 
-        <div onClick={this.resultsPerPage} className="paginate paginateActive">3</div>
-        <div onClick={this.resultsPerPage} className="paginate">10</div>
+        <div onClick={this.resultsPerPage} className="paginate">3</div>
+        <div onClick={this.resultsPerPage} className="paginate paginateActive">10</div>
         <div onClick={this.resultsPerPage} className="paginate">25</div>
         <div onClick={this.resultsPerPage} className="paginate">50</div>
 

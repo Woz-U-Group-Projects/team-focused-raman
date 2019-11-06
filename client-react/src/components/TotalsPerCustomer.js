@@ -73,7 +73,7 @@ class TotalsPerCustomer extends React.Component {
             }
             setTimeout(() => {
                 this.gridFormat();
-            }, 50);
+            }, 100);
         })
     }
     
@@ -141,7 +141,6 @@ class TotalsPerCustomer extends React.Component {
             setTimeout(() => {
                 this.gridFormat();
             }, 0);;
-            this.hideSpinner();
         }));
     };
     
@@ -197,6 +196,7 @@ class TotalsPerCustomer extends React.Component {
                 cells1[c].className = "dateField formatted";
             }
         }
+        this.hideSpinner();
     }
     
     setDataPerPage = () => {

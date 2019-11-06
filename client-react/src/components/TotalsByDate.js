@@ -73,7 +73,7 @@ class TotalsByDate extends React.Component {
             }
             setTimeout(() => {
                 this.gridFormat();
-            }, 50);
+            }, 100);
         })
     }
     
@@ -131,6 +131,7 @@ class TotalsByDate extends React.Component {
                 cells1[c].className = "dateField formatted";
             }
         }
+        this.hideSpinner();
     }
     
     deleteCustomer = (someone) => {
@@ -189,7 +190,6 @@ class TotalsByDate extends React.Component {
             setTimeout(() => {
                 this.gridFormat();
             }, 0);
-            this.hideSpinner();
         }));
     };
     

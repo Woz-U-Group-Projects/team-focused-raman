@@ -82,7 +82,7 @@ hideSpinner = () => {
   
   deleteCustomer = (someone) => {
     // eslint-disable-next-line
-    let url = "http://localhost:8080/customer/" + `${someone}`
+    let url = "http://127.0.0.1:8080/customer/" + `${someone}`
     axios.delete(url)
     .then(response => {
       this.getData();
@@ -98,7 +98,7 @@ hideSpinner = () => {
   }
   
   addCustomer = () => {
-    let url = "http://localhost:8080/customer";
+    let url = "http://127.0.0.1:8080/customer";
     axios.post(url, { 
       firstName: this.firstName.current.value,
       lastName: this.lastName.current.value,
@@ -128,7 +128,7 @@ hideSpinner = () => {
   };
   
   getData = () => {
-    let url = "http://localhost:8080/customer";
+    let url = "http://127.0.0.1:8080/customer";
     axios.get(url).then(response => this.setState({ customers: response.data }, function() {
       this.showNoData();
       this.setDataPerPage();

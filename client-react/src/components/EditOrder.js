@@ -81,7 +81,7 @@ class editOrder extends React.Component {
     
     getOrderDetail = () => {
         // eslint-disable-next-line
-        let url = "http://localhost:8080/orderdetail/" + `${this.state.activeOrder}`;
+        let url = "http://127.0.0.1:8080/orderdetail/" + `${this.state.activeOrder}`;
         axios.get(url)
         .then(response => {
             if(response.data === null) {
@@ -108,7 +108,7 @@ class editOrder extends React.Component {
     
     getData = () => {
         // eslint-disable-next-line
-        let url = "http://localhost:8080/order/" + `${this.state.activeOrder}`;
+        let url = "http://127.0.0.1:8080/order/" + `${this.state.activeOrder}`;
         axios.get(url)
         .then(response => {
             if(response.data === null) {
@@ -132,7 +132,7 @@ class editOrder extends React.Component {
     };
     
     getSearchData = () => {
-        let url = "http://localhost:8080/customersearch";
+        let url = "http://127.0.0.1:8080/customersearch";
         axios.get(url).then(response => this.setState({ query: response.data }));
     };
     
@@ -145,7 +145,7 @@ class editOrder extends React.Component {
     
     deleteOrder = (someOrder) => {
         // eslint-disable-next-line
-        let url = "http://localhost:8080/order/" + `${someOrder}`
+        let url = "http://127.0.0.1:8080/order/" + `${someOrder}`
         axios.delete(url)
         //    .catch(function (error) {
         //      console.log("Deletion failed with error: " + error);
@@ -157,7 +157,7 @@ class editOrder extends React.Component {
     
     updateOrder = () => {
         // eslint-disable-next-line
-        let url = "http://localhost:8080/order/" + `${this.orderid.current.value}`;
+        let url = "http://127.0.0.1:8080/order/" + `${this.orderid.current.value}`;
         axios.put(url, { 
             customerid: this.customerid.current.value,
             serviceDate: this.serviceDate.current.value,
@@ -252,7 +252,7 @@ class editOrder extends React.Component {
                 this.validateCustomer();
             } else {
                 this.showResults();
-                let url = "http://localhost:8080/customersearchinput";
+                let url = "http://127.0.0.1:8080/customersearchinput";
                 axios.post(url, { 
                     search: this.searchInput.current.value,            
                 }).then(response => {

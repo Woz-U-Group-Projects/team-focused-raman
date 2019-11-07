@@ -32,7 +32,7 @@ class NewCustomer extends React.Component {
   }
   
   addCustomer = () => {
-    let url = "http://localhost:8080/customer";
+    let url = "http://127.0.0.1:8080/customer";
     axios.post(url, { 
       firstName: this.firstName.current.value,
       lastName: this.lastName.current.value,

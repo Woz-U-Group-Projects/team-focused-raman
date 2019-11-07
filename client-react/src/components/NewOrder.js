@@ -64,7 +64,7 @@ class NewOrder extends React.Component {
             this.validateCustomer();
         } else {
             this.showResults();
-            let url = "http://localhost:8080/customersearchinput";
+            let url = "http://127.0.0.1:8080/customersearchinput";
             axios.post(url, { 
                 search: this.searchInput.current.value,            
             }).then(response => {
@@ -155,7 +155,7 @@ class NewOrder extends React.Component {
     }
     
     getSearchData = () => {
-        let url = "http://localhost:8080/customersearch";
+        let url = "http://127.0.0.1:8080/customersearch";
         axios.get(url).then(response => this.setState({ query: response.data }));
     };
     
@@ -167,7 +167,7 @@ class NewOrder extends React.Component {
     };
 
     addOrder = () => {
-        let url = "http://localhost:8080/order";
+        let url = "http://127.0.0.1:8080/order";
         axios.post(url, { 
             customerid: this.customerid.current.value,
             serviceDate: this.serviceDate.current.value,

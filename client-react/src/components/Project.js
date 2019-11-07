@@ -13,12 +13,12 @@ class Project extends React.Component {
   }
 
   getData = () => {
-    let url = "http://localhost:8080/tasks";
+    let url = "http://127.0.0.1:8080/tasks";
     axios.get(url).then(response => this.setState({ projects: response.data }));
   };
 
   addTask = () => {
-    let url = "http://localhost:8080/tasks";
+    let url = "http://127.0.0.1:8080/tasks";
     axios.post(url, { name: this.taskName.current.value }).then(response => {
       this.getData();
       this.taskName.current.value = "";

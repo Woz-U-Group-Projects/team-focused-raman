@@ -18,7 +18,7 @@ public class GroupProjectApplication {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:3000","http://localhost:3001","http://172.31.17.23","http://ip-172-31-17-23.us-east-2.compute.internal");
+                registry.addMapping("/**").allowedOrigins("http://localhost:3000","http://localhost:3001","http://localhost:5000","http://172.31.17.23","http://ip-172-31-17-23.us-east-2.compute.internal");
             }
         };
     }

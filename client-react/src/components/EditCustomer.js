@@ -65,7 +65,7 @@ class EditCustomer extends React.Component {
   
   getData = () => {
     // eslint-disable-next-line
-    let url = "http://127.0.0.1:8080/customer/" + `${this.state.activeCustomer}`;
+    let url = "/customer/" + `${this.state.activeCustomer}`;
     axios.get(url)
     .then(response => {
       if(response.data === null) {
@@ -91,7 +91,7 @@ class EditCustomer extends React.Component {
   
   deleteCustomer = (someone) => {
     // eslint-disable-next-line
-    let url = "http://127.0.0.1:8080/customer/" + `${someone}`
+    let url = "/customer/" + `${someone}`
     axios.delete(url)
     .then(response => {
       this.getData();
@@ -104,7 +104,7 @@ class EditCustomer extends React.Component {
 
   updateCustomer = () => {
     // eslint-disable-next-line
-    let url = "http://127.0.0.1:8080/customer/" + `${this.customerid.current.value}`;
+    let url = "/customer/" + `${this.customerid.current.value}`;
     axios.put(url, { 
       firstName: this.firstName.current.value,
       lastName: this.lastName.current.value,

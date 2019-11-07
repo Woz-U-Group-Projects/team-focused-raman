@@ -145,7 +145,7 @@ class NewOrder extends React.Component {
             this.customerid.current.value = '';
         } else {
             this.showResults();
-            let url = "http://127.0.0.1:8080/customersearchinput";
+            let url = "/customersearchinput";
             axios.post(url, { 
                 search: this.searchInput.current.value,            
             }).then(response => {
@@ -156,7 +156,7 @@ class NewOrder extends React.Component {
     };
     
     getData = () => {
-        let url = "http://127.0.0.1:8080/orderdetail";
+        let url = "/orderdetail";
         axios.get(url).then(response => this.setState({ orders: response.data },function() {
             this.showNoData();
             this.setDataPerPage();
@@ -165,7 +165,7 @@ class NewOrder extends React.Component {
     };
     
     getSearchData = () => {
-        let url = "http://127.0.0.1:8080/customersearch";
+        let url = "/customersearch";
         axios.get(url).then(response => this.setState({ query: response.data }));
     };
     
@@ -177,7 +177,7 @@ class NewOrder extends React.Component {
     
     deleteOrder = (someOrder) => {
         // eslint-disable-next-line
-        let url = "http://127.0.0.1:8080/order/" + `${someOrder}`
+        let url = "/order/" + `${someOrder}`
         axios.delete(url)
         //    .catch(function (error) {
         //      console.log("Deletion failed with error: " + error);
@@ -196,7 +196,7 @@ class NewOrder extends React.Component {
     }
     
     addOrder = () => {
-        let url = "http://127.0.0.1:8080/order";
+        let url = "/order";
         axios.post(url, { 
             customerid: this.customerid.current.value,
             serviceDate: this.serviceDate.current.value,
